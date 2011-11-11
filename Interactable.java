@@ -5,9 +5,9 @@
  * @author (your name) 
  * @version (a version number or a date)
  */
-public interface Interactable
+public interface Interactable extends Important
 {
-    public void interact(int where);
+    public void interact(String cmd);
     
-    public int whereInteractCmd(String cmd);
+    public boolean isInteractCmd(String cmd);
 }

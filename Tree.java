@@ -5,20 +5,20 @@
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Tree extends Block implements Interactable, Important
+public class Tree extends Block implements Interactable
 {
     private int height;
     
     private AdventureWorld world;
 
-    public void interact(int i) {
+    public void interact(String cmd) {
         world.setBlock(loc, new Ground(loc));
         System.out.println("You cut down the tree and got " + (height*5) + " wood");
         world.player.addToInventory(new Wood(5));
     }
 
-    public int whereInteractCmd(String response) {
-        return response.equalsIgnoreCase("chop tree") ? 0 : -1;
+    public boolean isInteractCmd(String cmd) {
+        return cmd.equalsIgnoreCase("chop tree");
     }
 
     public Tree(int x, int h, AdventureWorld wrld) {
@@ -29,5 +29,9 @@ public class Tree extends Block implements Interactable, Important
 
     public String getName() {
         return "Tree";
+    }
+    
+    public boolean isHidden() {
+        return false;
     }
 }

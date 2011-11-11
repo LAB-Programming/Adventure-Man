@@ -8,4 +8,6 @@
 public interface Important
 {
     public String getName();
+    
+    public boolean isHidden();
 }

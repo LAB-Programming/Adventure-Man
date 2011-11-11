@@ -5,10 +5,9 @@
  * @author (your name here)
  * @version (version number or date here)
  */
-public abstract class Entity extends WorldItem implements Interactable, Important
+public abstract class Entity extends WorldItem implements Interactable
 {
     protected AdventureWorld world;
-    
     
     public Entity(AdventureWorld wrld, int x) {
         world = wrld;

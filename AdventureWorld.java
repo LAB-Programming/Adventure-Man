@@ -33,4 +33,8 @@ public class AdventureWorld
         WorldStrip curStrip = world.get(new Integer(x));
         curStrip.setBlock(newBlock);
     }
+    
+    public void addEntity(Entity newEntity, int x) {
+        world.get(new Integer(x)).addEntity(newEntity);
+    }
 }
