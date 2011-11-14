@@ -28,7 +28,7 @@ public class Player extends Entity
             if(locationIsImportant) System.out.println("There is nothing of interest around you");
         }
         else if(cmd.equals("inventory"){
-            System.out.println(Arrays.toString(inventory);
+            System.out.println("you have:\n"+Arrays.toString(inventory);
         }
     }
 
