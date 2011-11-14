@@ -1,4 +1,3 @@
-
 /**
  * Write a description of class Wood here.
  * 
@@ -18,6 +17,9 @@ public class Wood implements InventoryItem
     }
     public String name(){
         return "Wood";
+    }
+    public String toString(){
+        return howMany+" "+name();
     }
     /**
      * Constructor for objects of class Wood
