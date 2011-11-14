@@ -1,4 +1,3 @@
-
 /**
  * Write a description of class Player here.
  * 
@@ -72,7 +71,11 @@ public class Player extends Entity
         return false;
     }
 
-    public boolean isInteractCmd(String cmd) {return false;}
+    public boolean isInteractCmd(String cmd) {
+        cmd = cmd.toLowerCase();
+        if (cmd.equals("move left") || cmd.equals("move right") || cmd.equals("inspect")) return true;
+        return false;
+    }
 
     public String getName(){
         return "Player";
