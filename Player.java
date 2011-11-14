@@ -27,6 +27,9 @@ public class Player extends Entity
             }
             if(locationIsImportant) System.out.println("There is nothing of interest around you");
         }
+        else if(cmd.equals("inventory"){
+            System.out.println(Arrays.toString(inventory);
+        }
     }
 
     public InventoryItem[] inventory = new InventoryItem[15];
