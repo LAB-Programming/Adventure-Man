@@ -38,6 +38,7 @@ public class AdventureMan
         world = new AdventureWorld();
         System.out.println("Welcome to Adventure Man!");
         player = new Player(world,0);
+        world.addEntity(player,0);
         world.player = player;
         while(!response.equalsIgnoreCase("quit")) {
             /*Set<WorldItem> curItems = world.world.get(new Integer(player.getLoc()));
@@ -65,11 +66,31 @@ public class AdventureMan
                 }
             }*/
             WorldStrip curStrip = world.world.get(new Integer(player.getLoc()));
-            HashSet<WorldItem> interacters = new HashSet<WorldItem>();
-            if(curStrip.getBlock() instanceof Interactable)
-            for(int i = 0; i < curStrip.getEntities().size(); i++){
-                
+            HashSet<Interactable> interacters = new HashSet<Interactable>();
+            Iterator<Entity> curEntitiesIterator = curStrip.getEntities().iterator();
+            Entity curEntity=null;
+            if(curStrip.getBlock() instanceof Interactable && (((Interactable) curStrip.getBlock()).isInteractCmd(response)))
+                interacters.add((Interactable) curStrip.getBlock());
+            while(curEntitiesIterator.hasNext()){
+                    curEntity=curEntitiesIterator.next();
+                    if(curEntity.isInteractCmd(response)) interacters.add(curEntity);
             }
+            Interactable[] interacterArray = interacters.toArray(new Interactable[interacters.size()]);
+            if(interacters.size() > 1) {
+                String msg = "Which thing do you want to "+response+"?\nType its coresponding number or type anything else to cancel.";
+                int i = 0;
+                while(i <= interacterArray.length) {
+                    Interactable cur = interacterArray[i];
+                    msg += "/n("+(++i)+") "+ cur;
+                }
+                try {
+                    int which = Integer.parseInt(specialRead(msg));
+                    if(which <= interacterArray.length) interacterArray[--which].interact(response);
+                    else System.out.println(response + " cancelled");
+                }catch(NumberFormatException nfe){
+                    System.out.println(response + " cancelled");
+                }
+            }else if(interacters.size() != 0) interacterArray[0].interact(response);
             response = in.nextLine();
         }
         System.out.println("See ya!");
@@ -79,5 +100,10 @@ public class AdventureMan
     public static void main(String args[]) {
         AdventureMan am = new AdventureMan();
 
+    }
+    
+    public String specialRead(String msg) {
+        System.out.println(msg);
+        return in.nextLine();
     }
 }
