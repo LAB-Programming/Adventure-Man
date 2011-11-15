@@ -1,12 +1,15 @@
 USER INSTRUCTIONS: You're walking around a 1-dimensional world
 
-Current world commands: move right, move left, inspect
-Current interact commands: chop tree
+Current interact commands by entity / block:
+ entities:
+   player: move right, move left, inspect, inventory
+ blocks:
+   tree: chop tree
 
-g_rocket just added an inventory and pseudofixed a bug
+g_rocket just added an inventory and fixed a bug
 
 Plans:
-[ ]Blocks could hold more than one thing.
+[√]Blocks could hold more than one thing.
 [ ]Help functions.
 [ ]It would be nice to know the commands that an object responds to (similar
 to an inspector that shows the methods of a class)
