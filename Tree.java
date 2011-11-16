@@ -1,4 +1,3 @@
-
 /**
  * Write a description of class Tree here.
  * 
@@ -14,7 +13,7 @@ public class Tree extends Block implements Interactable
     public void interact(String cmd) {
         world.setBlock(loc, new Ground(loc));
         System.out.println("You cut down the tree and got " + (height*5) + " wood");
-        world.getPlayer().addToInventory(new Wood(5));
+        world.getPlayer().addToInventory(new Wood(height*5));
     }
 
     public boolean isInteractCmd(String cmd) {
