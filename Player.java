@@ -16,8 +16,10 @@ public class Player extends Entity
             Iterator<Entity> curEntitiesIterator = curStrip.getEntities().iterator();
             Entity curEntity=null;
             boolean locationIsImportant=false;
-            if(curStrip.getBlock() instanceof Important && !((Important) curStrip.getBlock()).isHidden())
-                System.out.println("You are standing near a " + ((Important) curEntity).getName());
+            if(curStrip.getBlock() instanceof Important && !((Important) curStrip.getBlock()).isHidden()) {
+                System.out.println("You are standing near a " + ((Important) curStrip.getBlock()).getName());
+                locationIsImportant = true;
+            }
             while(curEntitiesIterator.hasNext()){
                 curEntity=curEntitiesIterator.next();
                 if(!curEntity.isHidden()) {
@@ -25,7 +27,7 @@ public class Player extends Entity
                     locationIsImportant = true;
                 }
             }
-            if(locationIsImportant) System.out.println("There is nothing of interest around you");
+            if(!locationIsImportant) System.out.println("There is nothing of interest around you");
         }
         else if(cmd.equals("inventory")){
             System.out.println("you have:\n"+Arrays.toString(inventory));
@@ -76,7 +78,7 @@ public class Player extends Entity
 
     public boolean isInteractCmd(String cmd) {
         cmd = cmd.toLowerCase();
-        if (cmd.equals("move left") || cmd.equals("move right") || cmd.equals("inspect")) return true;
+        if (cmd.equals("move left") || cmd.equals("move right") || cmd.equals("inspect") || cmd.equals("inventory")) return true;
         return false;
     }
 
@@ -89,6 +91,7 @@ public class Player extends Entity
     }
 
     public boolean move(int i) {
+        world.genWorld(getLoc()+i);
         if(super.move(i)) {
             System.out.println("You moved " + (i < 0 ? "Left" : "Right"));
             return true;

@@ -10,9 +10,9 @@ import java.util.*;
 public class AdventureMan
 {
     // instance variables - replace the example below with your own
-    public Scanner in = new Scanner(System.in);
-    public AdventureWorld world;
-    public Player player;
+    private Scanner in = new Scanner(System.in);
+    private AdventureWorld world;
+    private Player player;
 
     /**
      * Constructor for objects of class AdventureMan
@@ -35,11 +35,11 @@ public class AdventureMan
             System.out.println(response + " to you, too");
             response = in.nextLine();
         }
-        world = new AdventureWorld();
+        world = new AdventureWorld(this);
         System.out.println("Welcome to Adventure Man!");
         player = new Player(world,0);
         world.addEntity(player,0);
-        world.player = player;
+        
         while(!response.equalsIgnoreCase("quit")) {
             /*Set<WorldItem> curItems = world.world.get(new Integer(player.getLoc()));
             WorldItem curItem=null;
@@ -105,5 +105,9 @@ public class AdventureMan
     public String specialRead(String msg) {
         System.out.println(msg);
         return in.nextLine();
+    }
+    
+    public Player getPlayer() {
+        return player;
     }
 }

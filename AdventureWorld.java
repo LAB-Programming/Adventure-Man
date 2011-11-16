@@ -9,13 +9,13 @@ import java.util.Random;
  */
 public class AdventureWorld
 {
-    public Player player=null;
     HashMap<Integer,WorldStrip> world = new HashMap<Integer,WorldStrip>();
-    public AdventureWorld() {
-        for(int x = -10; x < 11; x++) {
-            WorldStrip block = new WorldStrip(getBlock(x));
-            world.put(new Integer(x),block);
-        }
+    
+    private AdventureMan game;
+    
+    public AdventureWorld(AdventureMan am) {
+        genWorld(0);
+        game = am;
     }
     
     private Block getBlock(int x) {
@@ -29,6 +29,15 @@ public class AdventureWorld
         }
     }
     
+    public void genWorld(int center) {
+        for(int x = -10; x < 11; x++) {
+            if(!world.containsKey(new Integer(center + x))) {
+                WorldStrip block = new WorldStrip(getBlock(center + x));
+                world.put(new Integer(center + x),block);
+            }
+        }
+    }
+    
     public void setBlock(int x, Block newBlock) {
         WorldStrip curStrip = world.get(new Integer(x));
         curStrip.setBlock(newBlock);
@@ -36,5 +45,13 @@ public class AdventureWorld
     
     public void addEntity(Entity newEntity, int x) {
         world.get(new Integer(x)).addEntity(newEntity);
+    }
+    
+    public void removeEntity(Entity entity, int x) {
+        world.get(new Integer(x)).removeEntity(entity);
+    }
+    
+    public Player getPlayer() {
+        return game.getPlayer();
     }
 }

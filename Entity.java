@@ -16,7 +16,9 @@ public abstract class Entity extends WorldItem implements Interactable
 
     public boolean move(int i) {
         if(world.world.containsKey(new Integer(loc + i))) {
+            world.removeEntity(this,loc);
             loc += i;
+            world.addEntity(this,loc);
             return true;
         }
         else return false;
