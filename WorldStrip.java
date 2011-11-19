@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Collection;
 /**
@@ -8,10 +9,11 @@ import java.util.Collection;
  */
 public class WorldStrip
 {
-    private Block block;
-
-    private HashSet<Entity> entities;
-
+    //Should air be a block or just make Block be null?
+    //World Height is fixed maybe I want an ordinary Array?
+    private WorldSpace[] strip2 = new WorldSpace[1024];
+    private HashMap<Integer,WorldSpace> strip = new HashMap<Integer,WorldSpace>();
+    /*
     public WorldStrip(Block startBlock) {
         block = startBlock;
         entities = new HashSet<Entity>();
@@ -27,38 +29,29 @@ public class WorldStrip
         entities = new HashSet<Entity>();
         entities.add(startEntity);
     }
+    */
 
-    public Block getBlock() {
-        return block;
+    public Block getBlock(int y) {
+        return strip.get(new Integer(y)).getBlock();
     }
 
-    public void setBlock(Block newBlock) {
-        block = newBlock;
+    public void setBlock(Block newBlock, int y) {
+        strip.get(new Integer(y)).setBlock(newBlock);
     }
 
-    public void addEntity(Entity newEntity) {
-        entities.add(newEntity);
+    public void addEntity(Entity newEntity, int y) {
+        strip.get(new Integer(y)).addEntity(newEntity);
     }
 
-    public void addEntities(Collection<Entity> newEntities) {
-        entities.addAll(newEntities);
+    public void addEntities(Collection<Entity> newEntities, int y) {
+        strip.get(new Integer(y)).addEntities(newEntities);
+    }
+    
+    public HashSet<Entity> getEntities(int y) {
+        return strip.get(new Integer(y)).getEntities;
     }
 
-    /*//Doesnt work with current entity equals code
-    public containsEntity(Entity entity) {
-    return entities.contains(entitiy);
-    }
-
-    public getEntity(Entity entity) {
-
-    }
-     */
-
-    public HashSet<Entity> getEntities() {
-        return entities;
-    }
-
-    public void removeEntity(Entity entity) {
-        entities.remove(entity);
+    public void removeEntity(Entity entity, int y) {
+        strip.get(new Integer(y)).removeEntity(entity);
     }
 }
