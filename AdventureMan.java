@@ -38,7 +38,7 @@ public class AdventureMan
         world = new AdventureWorld(this);
         System.out.println("Welcome to Adventure Man!");
         player = new Player(world,0);
-        world.addEntity(player,0);
+        world.addEntity(player,0,512);
         
         while(!response.equalsIgnoreCase("quit")) {
             /*Set<WorldItem> curItems = world.world.get(new Integer(player.getLoc()));
@@ -65,7 +65,7 @@ public class AdventureMan
                     if((curItem instanceof Interactable) && response.equalsIgnoreCase(((Interactable) curItem).getInteractCmd())) ((Interactable) curItem).interact();
                 }
             }*/
-            WorldStrip curStrip = world.world.get(new Integer(player.getLoc()));
+            WorldStrip curStrip = world.world.get(new Integer(player.getLocx()));
             HashSet<Interactable> interacters = new HashSet<Interactable>();
             Iterator<Entity> curEntitiesIterator = curStrip.getEntities().iterator();
             Entity curEntity=null;

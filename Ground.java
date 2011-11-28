@@ -7,7 +7,11 @@
  */
 public class Ground extends Block
 {
-    public Ground(int x) {
-        super(x);
+    public Ground(int x, int y) {
+        super(x,y);
+    }
+    
+    public boolean isSolid() {
+        return true;
     }
 }

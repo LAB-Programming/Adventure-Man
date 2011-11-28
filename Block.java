@@ -7,12 +7,16 @@
  */
 public abstract class Block extends WorldItem
 {
-    public Block(int x){
-        loc = x;
+    public Block(int x, int y){
+        locx = x;
+        locy = y;
     }
 
     public boolean equals(Object obj) {
-        if((obj instanceof Block) && (this.getLoc() == ((Block) obj).getLoc())) return true;
+        if((obj instanceof Block) && (this.getLocx() == ((Block) obj).getLocx()) && (this.getLocy() == ((Block) obj).getLocy()))
+            return true;
         return false;
     }
+    
+    public abstract boolean isSolid();
 }

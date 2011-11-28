@@ -11,7 +11,7 @@ public class Tree extends Block implements Interactable
     private AdventureWorld world;
 
     public void interact(String cmd) {
-        world.setBlock(loc, new Ground(loc));
+        world.setBlock(new Ground(locx,locy), locx, locy);
         System.out.println("You cut down the tree and got " + (height*5) + " wood");
         world.getPlayer().addToInventory(new Wood(height*5));
     }
@@ -20,8 +20,8 @@ public class Tree extends Block implements Interactable
         return cmd.equalsIgnoreCase("chop tree");
     }
 
-    public Tree(int x, int h, AdventureWorld wrld) {
-        super(x);
+    public Tree(int x, int y, int h, AdventureWorld wrld) {
+        super(x,y);
         height = h;
         world = wrld;
     }
@@ -31,6 +31,10 @@ public class Tree extends Block implements Interactable
     }
     
     public boolean isHidden() {
+        return false;
+    }
+    
+    public boolean isSolid() {
         return false;
     }
 }

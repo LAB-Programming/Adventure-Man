@@ -7,8 +7,13 @@
  */
 public abstract class WorldItem
 {
-    protected int loc;
-    public int getLoc() {
-        return loc;
+    protected int locx;
+    protected int locy;
+    public int getLocx() {
+        return locx;
+    }
+    
+    public int getLocy() {
+        return locy;
     }
 }
