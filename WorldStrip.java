@@ -11,8 +11,10 @@ public class WorldStrip
 {
     //Should air be a block or just make Block be null?
     //World Height is fixed maybe I want an ordinary Array?
-    private WorldSpace[] strip = new WorldSpace[1024];
+    //private WorldSpace[] strip = new WorldSpace[1024];
     //private HashMap<Integer,WorldSpace> strip = new HashMap<Integer,WorldSpace>();
+    private LinkedList<WorldSpace> stripAboveWater = new LinkedList<WorldSpace>();
+    private LinkedList<WorldSpace> stripBelowWater = new LinkedList<WorldSpace>();
     
     /*
     public WorldStrip(Block startBlock) {
@@ -31,28 +33,60 @@ public class WorldStrip
         entities.add(startEntity);
     }
     */
-
-    public Block getBlock(int y) {
-        return strip[y]/*.get(new Integer(y))*/.getBlock();
-    }
-
-    public void setBlock(Block newBlock, int y) {
-        strip[y]/*.get(new Integer(y))*/.setBlock(newBlock);
-    }
-
-    public void addEntity(Entity newEntity, int y) {
-        strip[y]/*.get(new Integer(y))*/.addEntity(newEntity);
-    }
-
-    public void addEntities(Collection<Entity> newEntities, int y) {
-        strip[y]/*.get(new Integer(y))*/.addEntities(newEntities);
+    
+    public void addToTop(Block newBlock){
+        stripAboveWater.addLast((new WorldSpace()).setBlock(newBlock));
     }
     
-    public HashSet<Entity> getEntities(int y) {
-        return strip[y]/*.get(new Integer(y))*/.getEntities;
+    public void addToBottom(Block newBlock){
+        stripBelowWater.addLast((new WorldSpace()).setBlock(newBlock));
     }
 
-    public void removeEntity(Entity entity, int y) {
-        strip[y]/*.get(new Integer(y))*/.removeEntity(entity);
+    public Block getBlock(long yAboveWater) {
+        if(yAboveWater>=0){
+            return stripAboveWater.get(yAboveWater).getBlock();
+        }else{
+            return stripBelowWater.get((yAboveWater-1)*(-1)).getBlock();
+        }
+    }
+
+    public void setBlock(Block newBlock, long yAboveWater) {
+        if(yAboveWater>=0){
+            stripAboveWater.get(yAboveWater).setBlock(newBlock);
+        }else{
+            stripBelowWater.get((yAboveWater-1)*(-1)).setBlock(newBlock);
+        }
+    }
+
+    public void addEntity(Entity newEntity, long yAboveWater) {
+        if(yAboveWater>=0){
+            stripAboveWater.get(yAboveWater).addEntity(newEntity);
+        }else{
+            stripBelowWater.get((yAboveWater-1)*(-1)).addEntity(newEntity);
+        }
+    }
+
+    public void addEntities(Collection<Entity> long yAboveWater) {
+        if(yAboveWater>=0){
+            stripAboveWater.get(yAboveWater).addEntities(newEntities);
+        }else{
+            stripBelowWater.get((yAboveWater-1)*(-1)).addEntities(newEntities);
+        }
+    }
+    
+    public HashSet<Entity> getEntities(long yAboveWater) {
+        if(yAboveWater>=0){
+            return stripAboveWater.get(yAboveWater).getEntities();
+        }else{
+            return stripBelowWater.get((yAboveWater-1)*(-1)).getEntities();
+        }
+    }
+
+    public void removeEntity(Entity entity, long yAboveWater) {
+        if(yAboveWater>=0){
+            stripAboveWater.get(yAboveWater).removeEntity(entity);
+        }else{
+            stripBelowWater.get((yAboveWater-1)*(-1)).removeEntity(entity);
+        }
     }
 }
