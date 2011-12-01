@@ -8,9 +8,11 @@ import java.util.Collection;
  */
 public class WorldSpace
 {
-   private Block block;
+    private Block block;
 
     private HashSet<Entity> entities;
+    
+    private boolean explored = false;
 
     public WorldSpace(Block startBlock) {
         block = startBlock;
@@ -43,12 +45,16 @@ public class WorldSpace
     public void addEntities(Collection<Entity> newEntities) {
         entities.addAll(newEntities);
     }
-    
+
     public HashSet<Entity> getEntities() {
         return entities;
     }
 
     public void removeEntity(Entity entity) {
         entities.remove(entity);
+    }
+
+    public boolean isExplored() {
+        return explored;
     }
 }

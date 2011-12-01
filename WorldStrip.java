@@ -1,4 +1,4 @@
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.HashSet;
 import java.util.Collection;
 /**
@@ -35,14 +35,14 @@ public class WorldStrip
     */
     
     public void addToTop(Block newBlock){
-        stripAboveWater.addLast((new WorldSpace()).setBlock(newBlock));
+        stripAboveWater.addLast(new WorldSpace(newBlock));
     }
     
     public void addToBottom(Block newBlock){
-        stripBelowWater.addLast((new WorldSpace()).setBlock(newBlock));
+        stripBelowWater.addLast(new WorldSpace(newBlock));
     }
 
-    public Block getBlock(long yAboveWater) {
+    public Block getBlock(int yAboveWater) {
         if(yAboveWater>=0){
             return stripAboveWater.get(yAboveWater).getBlock();
         }else{
@@ -50,7 +50,7 @@ public class WorldStrip
         }
     }
 
-    public void setBlock(Block newBlock, long yAboveWater) {
+    public void setBlock(Block newBlock, int yAboveWater) {
         if(yAboveWater>=0){
             stripAboveWater.get(yAboveWater).setBlock(newBlock);
         }else{
@@ -58,7 +58,7 @@ public class WorldStrip
         }
     }
 
-    public void addEntity(Entity newEntity, long yAboveWater) {
+    public void addEntity(Entity newEntity, int yAboveWater) {
         if(yAboveWater>=0){
             stripAboveWater.get(yAboveWater).addEntity(newEntity);
         }else{
@@ -66,7 +66,7 @@ public class WorldStrip
         }
     }
 
-    public void addEntities(Collection<Entity> long yAboveWater) {
+    public void addEntities(Collection<Entity> newEntities, int yAboveWater) {
         if(yAboveWater>=0){
             stripAboveWater.get(yAboveWater).addEntities(newEntities);
         }else{
@@ -74,7 +74,7 @@ public class WorldStrip
         }
     }
     
-    public HashSet<Entity> getEntities(long yAboveWater) {
+    public HashSet<Entity> getEntities(int yAboveWater) {
         if(yAboveWater>=0){
             return stripAboveWater.get(yAboveWater).getEntities();
         }else{
@@ -82,7 +82,7 @@ public class WorldStrip
         }
     }
 
-    public void removeEntity(Entity entity, long yAboveWater) {
+    public void removeEntity(Entity entity, int yAboveWater) {
         if(yAboveWater>=0){
             stripAboveWater.get(yAboveWater).removeEntity(entity);
         }else{
