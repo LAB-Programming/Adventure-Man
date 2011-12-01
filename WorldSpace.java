@@ -50,8 +50,8 @@ public class WorldSpace
         return entities;
     }
 
-    public void removeEntity(Entity entity) {
-        entities.remove(entity);
+    public boolean removeEntity(Entity entity) {
+        return entities.remove(entity);
     }
 
     public boolean isExplored() {
