@@ -67,14 +67,14 @@ public class AdventureWorld
         if(start < end) {
             for(int x = start, i = 0; x < end; x++, i++) {
                 if(!world.containsKey(new Integer(x))) {
-                    strips[i] = new WorldStrip();
+                    strips[i] = new WorldStrip(x);
                     world.put(new Integer(x), strips[i]);
                 }else strips[i] = world.get(new Integer(x));
             }
         }else{
             for(int x = start, i = 0; x > end; x--, i++) {
                 if(!world.containsKey(new Integer(x))) {
-                    strips[i] = new WorldStrip();
+                    strips[i] = new WorldStrip(x);
                     world.put(new Integer(x), strips[i]);
                 }else strips[i] = world.get(new Integer(x));
             }

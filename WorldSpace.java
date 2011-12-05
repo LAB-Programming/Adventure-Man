@@ -12,7 +12,7 @@ public class WorldSpace
 
     private HashSet<Entity> entities;
     
-    private boolean explored = false;
+    private boolean gen = false;
 
     public WorldSpace(Block startBlock) {
         block = startBlock;
@@ -54,7 +54,9 @@ public class WorldSpace
         return entities.remove(entity);
     }
 
-    public boolean isExplored() {
-        return explored;
+    public boolean isGenned() {
+        return gen;
     }
+    
+    public void 
 }

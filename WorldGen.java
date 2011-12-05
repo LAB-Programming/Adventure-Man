@@ -16,6 +16,7 @@ public class WorldGen
     }
     
     public void genWorld(int cx, int cy) {
+        WorldStrip[] strips = world.getStrips((cx - world.GEN_RADIUS_W),(cx + world.GEN_RADIUS_W + 1));
         
     }
 }

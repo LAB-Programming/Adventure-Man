@@ -1,4 +1,4 @@
-
+import java.util.Random;
 /**
  * Write a description of class TerrainGen here.
  * 
@@ -8,12 +8,40 @@
 public class TerrainGen
 {
     private AdventureWorld world;
+    
+    private static final int HILL_MAX_H = 12;
+    private static final int VALLEY_MIN_H = 12;
 
+    
+    /**
+     * 
+     */
     public TerrainGen(AdventureWorld wrld) {
         world = wrld;
     }
     
-    public void genWorld(int cx, int cy) {
-        WorldStrip[] strips = world.getStrips((cx - world.GEN_RADIUS_W),(cx + world.GEN_RADIUS_W + 1));
+    
+    /**
+     * generate a square of the world
+     */
+    public void genWorld(WorldStrip[] strips, int cy) {
+        int[] heights = new int[strips.length];
+        for(int i = 0; i < heights.length; i++)
+            heights[i] = Random.nextInt(HILL_MAX_H + VALLEY_MIN_H + 1);
+        for(int x = 0; x < strips.length; x++) {
+            
+            /*for(int y = cy - world.GEN_RADIUS_H; y < (cy + world.GEN_RADIUS_H + 1); y++) {
+                if(strips[x].didGenBlock(y)) continue; //y loop
+                
+            }*/
+        }
+    }
+    
+    
+    /**
+     * 
+     */
+    private Block genBlock(int y) {
+        
     }
 }

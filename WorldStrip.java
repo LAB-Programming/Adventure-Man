@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Collection;
 /**
@@ -12,22 +12,23 @@ public class WorldStrip
     //Should air be a block or just make Block be null?
     //World Height is fixed maybe I want an ordinary Array?
     //private WorldSpace[] strip = new WorldSpace[1024];
-    private BlockGenerator dBlockGen;
+    //private BlockGenerator dBlockGen;
     private HashMap<Long,WorldSpace> strip = new HashMap<Long,WorldSpace>();
+    private int x;
     //private LinkedList<WorldSpace> stripAboveWater = new LinkedList<WorldSpace>();
     //private LinkedList<WorldSpace> stripBelowWater = new LinkedList<WorldSpace>();
     
-    public WorldStrip(BlockGenerator dbj){
-        dBlockGet=dbj;
+    public WorldStrip(int locx){
+        x = locx;
     }
-    
+    /*
     public void setDefaultBlock(Block dBlock){
         dBlockGet=dbj;
     }
     
     public Block getDefaultBlock(){
         return dBlockGen;
-    }
+    }*
     
     /*
     public WorldStrip(Block startBlock) {
@@ -56,12 +57,9 @@ public class WorldStrip
     }*/
     
     public boolean didGenBlock(long y){
-        return strip.getBlock(new Long(y)) != null;
+        return (getBlock(y) != null && getBlock(y).isGenned());
     }
     
-    public void getBlock(long y){
-        strip.put(new Long(y), new WorldSpace(defaultBlock));
-    }
 
     public Block getBlock(long y) {
         /*if(yAboveWater>=0){
@@ -84,34 +82,36 @@ public class WorldStrip
         else curSpace.setBlock(newBlock);
     }
 
-    public void addEntity(Entity newEntity, long y) {
+    public boolean addEntity(Entity newEntity, long y) {
         /*if(yAboveWater>=0){
             stripAboveWater.get(yAboveWater).addEntity(newEntity);
         }else{
             stripBelowWater.get((yAboveWater-1)*(-1)).addEntity(newEntity);
         }*/
         WorldSpace curSpace = strip.get(new Long(y));
-        if(curSpace == null){
+        if(curSpace == null) return false;/*{
             curSpace = new WorldSpace(defaultBlock);
             curSpace.addEntity(newEntity);
             strip.put(new Long(y), curStrip);
-        }
+        }*/
         else curSpace.addEntity(newEntity);
+        return true;
     }
 
-    public void addEntities(Collection<Entity> newEntities, long y) {
+    public boolean addEntities(Collection<Entity> newEntities, long y) {
         /*if(yAboveWater>=0){
             stripAboveWater.get(yAboveWater).addEntities(newEntities);
         }else{
             stripBelowWater.get((yAboveWater-1)*(-1)).addEntities(newEntities);
         }*/
         WorldSpace curSpace = strip.get(new Long(y));
-        if(curSpace == null){
+        if(curSpace == null) return false;/*{
             curSpace = new WorldSpace(defaultBlock);
             curSpace.addEntities(newEntities);
             strip.put(new Long(y), curStrip);
-        }
+        }*/
         else curSpace.addEntities(newEntities);
+        return true;
     }
     
     public HashSet<Entity> getEntities(long y) {
@@ -133,5 +133,9 @@ public class WorldStrip
         WorldSpace curSpace = strip.get(new Long(y));
         if(curSpace != null) return curSpace.removeEntity(entity);
         else return false;
+    }
+    
+    public WorldSpace getSpace(long y) {
+        return strip.get(new Long(y));
     }
 }
