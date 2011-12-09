@@ -57,6 +57,4 @@ public class WorldSpace
     public boolean isGenned() {
         return gen;
     }
-    
-    public void 
 }

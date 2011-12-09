@@ -12,6 +12,6 @@ public class Air extends Block
     }
     
     public boolean isSolid() {
-        return true;
+        return false;
     }
 }

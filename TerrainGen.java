@@ -24,24 +24,19 @@ public class TerrainGen
     /**
      * generate a square of the world
      */
-    public void genWorld(WorldStrip[] strips, int cy) {
-        int[] heights = new int[strips.length];
+    public void genWorld(WorldStrip[] strips, long cy) {
+        
+        /*int[] heights = new int[strips.length];
         for(int i = 0; i < heights.length; i++)
-            heights[i] = Random.nextInt(HILL_MAX_H + VALLEY_MIN_H + 1);
+            heights[i] = (new Random()).nextInt(HILL_MAX_H + VALLEY_MIN_H + 1);
         for(int x = 0; x < strips.length; x++) {
             
-            /*for(int y = cy - world.GEN_RADIUS_H; y < (cy + world.GEN_RADIUS_H + 1); y++) {
-                if(strips[x].didGenBlock(y)) continue; //y loop
-                
-            }*/
-        }
+            //for(int y = cy - world.GEN_RADIUS_H; y < (cy + world.GEN_RADIUS_H + 1); y++) {
+            //    if(strips[x].didGenBlock(y)) continue; //y loop
+            //    
+            //}
+        }*/
     }
     
     
-    /**
-     * 
-     */
-    private Block genBlock(int y) {
-        
-    }
 }

@@ -9,9 +9,10 @@ public abstract class Entity extends WorldItem implements Interactable
 {
     protected AdventureWorld world;
     
-    public Entity(AdventureWorld wrld, int x) {
+    public Entity(AdventureWorld wrld, int x, int y) {
         world = wrld;
-        loc = x;
+        locx = x;
+        locy = y;
     }
 
     public boolean move(int i) {
