@@ -57,7 +57,7 @@ public class WorldStrip
     }*/
     
     public boolean didGenBlock(long y){
-        return (getBlock(y) != null && getBlock(y).isGenned());
+        return (getBlock(y) != null && getSpace(y).isGenned());
     }
     
 
