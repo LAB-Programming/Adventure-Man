@@ -16,13 +16,15 @@ public abstract class Entity extends WorldItem implements Interactable
     }
 
     public boolean move(int i) {
-        if(world.world.containsKey(new Integer(loc + i))) {
-            world.removeEntity(this,loc);
-            loc += i;
-            world.addEntity(this,loc);
+        //if(world.getStrip(locx).get) {
+            System.out.println("Hey Stupid! Fix Entity move!");
+            if(true) throw new RuntimeException();
+            world.removeEntity(this,locx,locy);
+            locx += i;
+            world.addEntity(this,locx,locy);
             return true;
-        }
-        else return false;
+        //}
+        //else return false;
     }
     
 }

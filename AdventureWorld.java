@@ -12,7 +12,7 @@ public class AdventureWorld
     public static final int GEN_RADIUS_H = 15;
     public static final int GEN_RADIUS_W = 10;
 
-    HashMap<Integer,WorldStrip> world = new HashMap<Integer,WorldStrip>();
+    private HashMap<Integer,WorldStrip> world = new HashMap<Integer,WorldStrip>();
 
     private AdventureMan game;
 
@@ -39,6 +39,10 @@ public class AdventureWorld
 
     public void genWorld(int cx, int cy) {
         generator.genWorld(cx,cy);
+    }
+    
+    public WorldStrip getStrip(int x) {
+        return world.get(new Integer(x));
     }
 
     public void setBlock(Block newBlock, int x, int y) {

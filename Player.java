@@ -12,12 +12,12 @@ public class Player extends Entity
         if(cmd.equals("move left")) this.move(-1);
         else if(cmd.equals("move right")) this.move(1);
         else if(cmd.equals("inspect")) {
-            WorldStrip curStrip = world.world.get(new Integer(getLoc()));
-            Iterator<Entity> curEntitiesIterator = curStrip.getEntities().iterator();
+            WorldSpace curSpace = world.getStrip(getLocx()).getSpace(getLocy());
+            Iterator<Entity> curEntitiesIterator = curSpace.getEntities().iterator();
             Entity curEntity=null;
             boolean locationIsImportant=false;
-            if(curStrip.getBlock() instanceof Important && !((Important) curStrip.getBlock()).isHidden()) {
-                System.out.println("You are standing near a " + ((Important) curStrip.getBlock()).getName());
+            if(curSpace.getBlock() instanceof Important && !((Important) curSpace.getBlock()).isHidden()) {
+                System.out.println("You are standing near a " + ((Important) curSpace.getBlock()).getName());
                 locationIsImportant = true;
             }
             while(curEntitiesIterator.hasNext()){
@@ -86,12 +86,12 @@ public class Player extends Entity
         return "Player";
     }
 
-    public Player(AdventureWorld wrld, int x) {
-        super(wrld,x);
+    public Player(AdventureWorld wrld, int x, int y) {
+        super(wrld,x, y);
     }
 
     public boolean move(int i) {
-        world.genWorld(getLoc()+i);
+        world.genWorld(getLocx()+i);
         if(super.move(i)) {
             System.out.println("You moved " + (i < 0 ? "Left" : "Right"));
             return true;
