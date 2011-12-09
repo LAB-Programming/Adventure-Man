@@ -12,6 +12,12 @@ public class TerrainGen
     private static final int HILL_MAX_H = 12;
     private static final int VALLEY_MIN_H = 12;
 
+    //private static final int HILL_MAX_H = 12;
+    //private static final int VALLEY_MIN_H = 12;
+    private static final byte UNSEEDED=0;
+    private static final byte BELOW_GROUND=1;
+    private static final byte ABOVE_GROUND=2;
+    private static final byte INVERSE_SQUARE=3;
     
     /**
      * 
@@ -25,6 +31,20 @@ public class TerrainGen
      * generate a square of the world
      */
     public void genWorld(WorldStrip[] strips, long cy) {
+        WorldSpace genSpace[][]=new WorldSpace[strips.length][(AdventureWorld.GEN_RADIUS_H*2)+1]();
+        byte gen_config=UNSEEDED;
+        for(int i=0;i<genSpace.length;i++){
+            for(int j=0;j<genSpace[0].length;j++){
+                WorldSpace curSpace=strips[i].getBlock(j+cy-AdventureWorld.GEN_RADIUS_H);
+                genSpace[i][j]=curSpace;
+                if(curSpace!=null){
+                    switch(gen_config){
+                        case UNSEEDED:
+                        if(curSpace.isSolid()) 
+                    }
+                }
+            }
+        }
         
         /*int[] heights = new int[strips.length];
         for(int i = 0; i < heights.length; i++)
