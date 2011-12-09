@@ -126,7 +126,10 @@ package.editor.height=663
 package.editor.width=1101
 package.editor.x=268
 package.editor.y=30
+<<<<<<< HEAD
 package.numDependencies=41
+=======
+>>>>>>> 51a6de93ae959550400e9f97499a1884918e664f
 package.numDependencies=38
 package.numTargets=17
 package.showExtends=true
