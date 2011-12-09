@@ -127,6 +127,7 @@ package.editor.width=1101
 package.editor.x=268
 package.editor.y=30
 package.numDependencies=41
+package.numDependencies=38
 package.numTargets=17
 package.showExtends=true
 package.showUses=true
