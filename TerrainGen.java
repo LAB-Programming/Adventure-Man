@@ -9,9 +9,6 @@ public class TerrainGen
 {
     private AdventureWorld world;
     
-    private static final int HILL_MAX_H = 12;
-    private static final int VALLEY_MIN_H = 12;
-
     //private static final int HILL_MAX_H = 12;
     //private static final int VALLEY_MIN_H = 12;
     private static final byte UNSEEDED=0;
