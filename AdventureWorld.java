@@ -12,7 +12,7 @@ public class AdventureWorld
     public static final int GEN_RADIUS_H = 15;
     public static final int GEN_RADIUS_W = 10;
 
-    private HashMap<Integer,WorldStrip> world = new HashMap<Integer,WorldStrip>();
+    private HashMap<Long,WorldStrip> world = new HashMap<Long,WorldStrip>();
 
     private AdventureMan game;
 
@@ -37,25 +37,25 @@ public class AdventureWorld
     }
      */
 
-    public void genWorld(int cx, int cy) {
+    public void genWorld(long cx, long cy) {
         generator.genWorld(cx,cy);
     }
     
-    public WorldStrip getStrip(int x) {
-        return world.get(new Integer(x));
+    public WorldStrip getStrip(long x) {
+        return world.get(new Long(x));
     }
 
-    public void setBlock(Block newBlock, int x, int y) {
-        WorldStrip curStrip = world.get(new Integer(x));
+    public void setBlock(Block newBlock, long x, long y) {
+        WorldStrip curStrip = world.get(new Long(x));
         curStrip.setBlock(newBlock,y);
     }
 
-    public void addEntity(Entity newEntity, int x, int y) {
-        world.get(new Integer(x)).addEntity(newEntity,y);
+    public void addEntity(Entity newEntity, long x, long y) {
+        world.get(new Long(x)).addEntity(newEntity,y);
     }
 
-    public void removeEntity(Entity entity, int x, int y) {
-        world.get(new Integer(x)).removeEntity(entity,y);
+    public void removeEntity(Entity entity, long x, long y) {
+        world.get(new Long(x)).removeEntity(entity,y);
     }
 
     /**
@@ -66,21 +66,21 @@ public class AdventureWorld
      * @param  end   the x of the first WorldStrip after the array
      * @return     An array of WorldStrips
      */
-    public WorldStrip[] getStrips(int start, int end) {
-        WorldStrip strips[] = new WorldStrip[Math.abs(start - end)];
+    public WorldStrip[] getStrips(long start, long end) {
+        WorldStrip strips[] = new WorldStrip[(long)(((start - end)>0)? (start - end): (end - start))];
         if(start < end) {
-            for(int x = start, i = 0; x < end; x++, i++) {
-                if(!world.containsKey(new Integer(x))) {
+            for(long x = start, i = 0; x < end; x++, i++) {
+                if(!world.containsKey(new Long(x))) {
                     strips[i] = new WorldStrip(x);
-                    world.put(new Integer(x), strips[i]);
-                }else strips[i] = world.get(new Integer(x));
+                    world.put(new Long(x), strips[i]);
+                }else strips[i] = world.get(new Long(x));
             }
         }else{
-            for(int x = start, i = 0; x > end; x--, i++) {
-                if(!world.containsKey(new Integer(x))) {
+            for(long x = start, i = 0; x > end; x--, i++) {
+                if(!world.containsKey(new Long(x))) {
                     strips[i] = new WorldStrip(x);
-                    world.put(new Integer(x), strips[i]);
-                }else strips[i] = world.get(new Integer(x));
+                    world.put(new Long(x), strips[i]);
+                }else strips[i] = world.get(new Long(x));
             }
         }
         return strips;

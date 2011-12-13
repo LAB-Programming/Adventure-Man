@@ -7,7 +7,7 @@
  */
 public class Ground extends Block
 {
-    public Ground(int x, int y) {
+    public Ground(long x, long y) {
         super(x,y);
     }
     

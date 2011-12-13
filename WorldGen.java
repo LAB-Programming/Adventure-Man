@@ -15,7 +15,7 @@ public class WorldGen
         world = wrld;
     }
     
-    public void genWorld(int cx, int cy) {
+    public void genWorld(long cx, long cy) {
         WorldStrip[] strips = world.getStrips((cx - world.GEN_RADIUS_W),(cx + world.GEN_RADIUS_W + 1));
         
     }

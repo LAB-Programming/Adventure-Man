@@ -7,7 +7,7 @@
  */
 public abstract class Block extends WorldItem
 {
-    public Block(int x, int y){
+    public Block(long x, long y){
         locx = x;
         locy = y;
     }

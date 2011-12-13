@@ -14,13 +14,18 @@ public class WorldStrip
     //private WorldSpace[] strip = new WorldSpace[1024];
     //private BlockGenerator dBlockGen;
     private HashMap<Long,WorldSpace> strip = new HashMap<Long,WorldSpace>();
-    private int x;
+    private long x;
     //private LinkedList<WorldSpace> stripAboveWater = new LinkedList<WorldSpace>();
     //private LinkedList<WorldSpace> stripBelowWater = new LinkedList<WorldSpace>();
     
-    public WorldStrip(int locx){
+    public WorldStrip(long locx){
         x = locx;
     }
+    
+    public long getX(){
+        return x;
+    }
+    
     /*
     public void setDefaultBlock(Block dBlock){
         dBlockGet=dbj;
