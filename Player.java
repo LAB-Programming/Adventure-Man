@@ -91,7 +91,7 @@ public class Player extends Entity
     }
 
     public boolean move(int i) {
-        world.genWorld(getLocx()+i);
+        world.genWorld(getLocx()+i,getLocy());
         if(super.move(i)) {
             System.out.println("You moved " + (i < 0 ? "Left" : "Right"));
             return true;

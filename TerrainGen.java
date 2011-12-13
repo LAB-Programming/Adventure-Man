@@ -15,6 +15,7 @@ public class TerrainGen
     private static final byte BELOW_GROUND=1;
     private static final byte ABOVE_GROUND=2;
     private static final byte INVERSE_SQUARE=3;
+    private Random r = new Random();
     
     /**
      * 
@@ -23,6 +24,13 @@ public class TerrainGen
         world = wrld;
     }
     
+    long localYToGlobalY(int localY, long globalYCenterRefrence){
+        return (localY+globalYCenterRefrence-AdventureWorld.GEN_RADIUS_H);
+    }
+    
+    int globalYToLocalY(long globalY, long globalYCenterRefrence){
+        return (int)(globalY-globalYCenterRefrence+AdventureWorld.GEN_RADIUS_H);
+    }
     
     /**
      * generate a square of the world
@@ -32,7 +40,7 @@ public class TerrainGen
         byte gen_config=UNSEEDED;
         for(int i=0;i<genSpace.length;i++){
             for(int j=0;j<genSpace[i].length;j++){
-                Block curBlock=strips[i].getBlock(j+cy-AdventureWorld.GEN_RADIUS_H);
+                Block curBlock=strips[i].getBlock(localYToGlobalY(j,cy));
                 genSpace[i][j]=curBlock;
                 if(curBlock!=null){
                     switch(gen_config){
@@ -53,9 +61,24 @@ public class TerrainGen
         if(gen_config==BELOW_GROUND||(gen_config==UNSEEDED&&cy<(-12))){
             for(int i=0;i<genSpace.length;i++){
                 for(int j=0;j<genSpace[i].length;j++){
-                    if(genSpace[i][j]==null) genSpace[i][j]=new Ground(strips[i].getX(),j+cy-AdventureWorld.GEN_RADIUS_H);
+                    if(genSpace[i][j]==null){
+                        genSpace[i][j]=new Ground(strips[i].getX(),localYToGlobalY(j,cy));
+                    }
                 }
             }
+        }
+        if(gen_config==ABOVE_GROUND||(gen_config==UNSEEDED&&cy>13)){
+            for(int i=0;i<genSpace.length;i++){
+                for(int j=0;j<genSpace[i].length;j++){
+                    if(genSpace[i][j]==null){
+                        genSpace[i][j]=new Air(strips[i].getX(),localYToGlobalY(j,cy));
+                    }
+                }
+            }
+        }
+        if(gen_config==UNSEEDED){
+            int h1 = r.nextInt(14)+r.nextInt(14), h2 = r.nextInt(14)+r.nextInt(14);
+            
         }
         /*int[] heights = new int[strips.length];
         for(int i = 0; i < heights.length; i++)

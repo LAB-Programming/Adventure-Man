@@ -7,7 +7,7 @@
  */
 public class Air extends Block
 {
-    public Air(int x, int y) {
+    public Air(long x, long y) {
         super(x,y);
     }
     

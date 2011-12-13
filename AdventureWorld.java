@@ -67,16 +67,18 @@ public class AdventureWorld
      * @return     An array of WorldStrips
      */
     public WorldStrip[] getStrips(long start, long end) {
-        WorldStrip strips[] = new WorldStrip[(long)(((start - end)>0)? (start - end): (end - start))];
+        WorldStrip strips[] = new WorldStrip[(int)(((start - end)>0)? (start - end): (end - start))];
+        int i;
+        long x;
         if(start < end) {
-            for(long x = start, i = 0; x < end; x++, i++) {
+            for(x = start, i = 0; x < end; x++, i++) {
                 if(!world.containsKey(new Long(x))) {
                     strips[i] = new WorldStrip(x);
                     world.put(new Long(x), strips[i]);
                 }else strips[i] = world.get(new Long(x));
             }
         }else{
-            for(long x = start, i = 0; x > end; x--, i++) {
+            for(x = start, i = 0; x > end; x--, i++) {
                 if(!world.containsKey(new Long(x))) {
                     strips[i] = new WorldStrip(x);
                     world.put(new Long(x), strips[i]);
