@@ -13,12 +13,13 @@ public abstract class Entity extends WorldItem implements Interactable
         world = wrld;
         locx = x;
         locy = y;
+        move(0);//should put them above ground
     }
 
     public boolean move(int i) {
         //if(world.getStrip(locx).get) {
             System.out.println("Hey Stupid! Fix Entity move!");
-            if(true) throw new RuntimeException();
+            if(true) throw new EntityMoveNeedsToBeFixedException();
             world.removeEntity(this,locx,locy);
             locx += i;
             world.addEntity(this,locx,locy);
