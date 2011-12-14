@@ -9,8 +9,9 @@ public class Player extends Entity
 {
     public void interact(String cmd){
         cmd = cmd.toLowerCase();
-        if(cmd.equals("move left")) this.move(-1);
-        else if(cmd.equals("move right")) this.move(1);
+        if(cmd.equals("move left")||cmd.equals("ml")) this.move(-1);
+        else if(cmd.equals("move right")||cmd.equals("mr")) this.move(1);
+        else if(cmd.startsWith("move "))this.move(Integer.parseInt(cmd.split("move ")[0]));
         else if(cmd.equals("inspect")) {
             WorldSpace curSpace = world.getStrip(getLocx()).getSpace(getLocy());
             Iterator<Entity> curEntitiesIterator = curSpace.getEntities().iterator();
