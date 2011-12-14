@@ -4,8 +4,8 @@ import java.util.Random;
 /**
  * Write a description of class AdventureWorld here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author gavin yancey
+ * @version -1
  */
 public class AdventureWorld
 {
