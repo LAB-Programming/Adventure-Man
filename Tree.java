@@ -17,7 +17,7 @@ public class Tree extends Block implements Interactable
     }
 
     public boolean isInteractCmd(String cmd) {
-        return cmd.equalsIgnoreCase("chop tree");
+        return cmd.equalsIgnoreCase("chop tree")||cmd.equalsIgnoreCase("chop");
     }
 
     public Tree(int x, int y, int h, AdventureWorld wrld) {
