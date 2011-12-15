@@ -1,13 +1,12 @@
 import java.util.Random;
 import java.util.LinkedList;
+import java.util.Iterator;
 /**
  * Write a description of class TerrainGen here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Gavin Yancey
  */
-public class TerrainGen
-{
+public class TerrainGen {
     private AdventureWorld world;
     
     private static final int HILL_MAX_H = 12;
@@ -126,9 +125,41 @@ public class TerrainGen
                     curh=curHeights[1][1];
                 }
         }
-        if(true) throw new RuntimeException("Code to generate world not created yet!");
-        /**generate world here*/
-        
+        //if(true) throw new RuntimeException("Code to generate world not created yet!");
+        ///**generate world here*/
+        Iterator<int[][]> lenghtsToGenIterator = lengthsToGen.iterator();
+        int curLen[][];
+        while(lenghtsToGenIterator.hasNext()){
+            curLen=lenghtsToGenIterator.next();
+            double curVar = curLen[1][0]-curLen[0][0]*1.1;
+            int[] heights = applyInverseSquareRecursively(curLen,curVar);
+            for(int i=0;i<heights.length;i++){
+                if(heights[i]>genSpace[i].length){
+                    for(int j=0;j<genSpace[i].length;j++){
+                        if(genSpace[i][j]==null){
+                            genSpace[i][j]=new Ground(strips[i].getX(),localYToGlobalY(j,cy));
+                        }else if(!genSpace[i][j].isSolid())throw new IllegalWorldException("underground block not solid!");//should never be reached
+                    }  
+                }else if(heights[i]<0){
+                    for(int j=0;j<genSpace[i].length;j++){
+                        if(genSpace[i][j]==null){
+                            genSpace[i][j]=new Air(strips[i].getX(),localYToGlobalY(j,cy));
+                        }else if(genSpace[i][j].isSolid())throw new IllegalWorldException("aboveground block solid!");//should never be reached
+                    }
+                }else{
+                    for(int j=heights[i];j>0;j--){
+                        if(genSpace[i][j]==null){
+                            genSpace[i][j]=new Ground(strips[i].getX(),localYToGlobalY(j,cy));
+                        }else if(!genSpace[i][j].isSolid())throw new IllegalWorldException("underground block not solid!");//should never be reached
+                    }
+                    for(int j=heights[i]+1;j<genSpace[i].length;j++){
+                        if(genSpace[i][j]==null){
+                            genSpace[i][j]=new Air(strips[i].getX(),localYToGlobalY(j,cy));
+                        }else if(genSpace[i][j].isSolid())throw new IllegalWorldException("aboveground block solid!");//should never be reached
+                    }
+                }
+            }
+        }
         /*int[] heights = new int[strips.length];
         for(int i = 0; i < heights.length; i++)
             heights[i] = (new Random()).nextInt(HILL_MAX_H + VALLEY_MIN_H + 1);
@@ -141,6 +172,39 @@ public class TerrainGen
         }*/
     }
     
+    private int[] applyInverseSquareRecursively(int curLen[][], double curVar){
+        int len=curLen[1][0]-curLen[0][0];
+        int returnArray[]=new int[len+1];
+        returnArray[0]=curLen[0][1];
+        returnArray[len]=curLen[1][1];
+        int center = (len)/2;
+        int centerH = (returnArray[0]+returnArray[1])/2;
+        centerH += (int)(r.nextInt((int)curVar)-curVar/2);
+        returnArray[center]=centerH;
+        if(curLen[0][0]-center>1){
+            int newCurLen[][]=new int[2][2];
+            newCurLen[0][0]=curLen[0][0];
+            newCurLen[1][0]=center;
+            newCurLen[0][1]=curLen[0][1];
+            newCurLen[1][1]=centerH;
+            int temp[] = applyInverseSquareRecursively(newCurLen,curVar/2);
+            for(int i=0;i<temp.length;i++){
+                returnArray[i]=temp[i];
+            }
+        }
+        if(center-curLen[0][1]>1){
+            int newCurLen[][]=new int[2][2];
+            newCurLen[0][0]=center;
+            newCurLen[1][0]=curLen[1][0];
+            newCurLen[0][1]=centerH;
+            newCurLen[1][1]=curLen[1][1];
+            int temp[] = applyInverseSquareRecursively(newCurLen,curVar/2);
+            for(int i=0;i<temp.length;i++){
+                returnArray[i+center]=temp[i];
+            }
+        }
+        return returnArray;
+    }
         
     private int centeredRandom(int min, int max){
         return (r.nextInt((max-min)/2)+r.nextInt((max-min)/2))+min;
