@@ -32,8 +32,7 @@ public class TerrainGen {
         PRINT_OUT_AND_IGNORE,
         PRINT_ERR_AND_DO,
         PRINT_ERR_AND_IGNORE,
-        THROW_IF_NOT_SOLID,
-        THROW_IF_SOLID,
+        THROW_IF_DIFFERENT,
         THROW,
     }
     private Random r = new Random();
@@ -77,18 +76,20 @@ public class TerrainGen {
     }
     
     private void setBlock(Block b, int x, int y, OoB outOfBounds, setNotNull snn) throws BadBlockException {
+        Block curBlock;
         if(x>=0&&x<genSpace.length&&y>=0&&y<genSpace[x].length){
-            if(genSpace[x][y]!=null){
+            curBlock=genSpace[x][y];
+            if(curBlock!=null){
+                if(curBlock.getClass()==b.getClass()) return; //if we're trying to set something to what it is, we can just do nothing
                 switch(snn){
                     case DO: break;
                     case IGNORE: return;
-                    case PRINT_OUT_AND_DO: System.out.println("attemting to set ("+x+", "+y+"), which is not null"); break;
-                    case PRINT_OUT_AND_IGNORE: System.out.println("attemting to set ("+x+", "+y+"), which is not null"); return;
-                    case PRINT_ERR_AND_DO: System.err.println("attemting to set ("+x+", "+y+"), which is not null"); break;
-                    case PRINT_ERR_AND_IGNORE: System.err.println("attemting to set ("+x+", "+y+"), which is not null"); return;
-                    case THROW_IF_NOT_SOLID: if(!genSpace[x][y].isSolid()) throw new IllegalWorldException("underground block ("+x+", "+y+") not solid");
-                    case THROW_IF_SOLID: if(genSpace[x][y].isSolid()) throw new IllegalWorldException("aboveground block ("+x+", "+y+") solid");
-                    case THROW: throw new BlockNotNullException("attemting to set ("+x+", "+y+"), which is not null", genSpace[x][y]);
+                    case PRINT_OUT_AND_DO: System.out.println("attemting to set ("+x+", "+y+") to "+b+"; it is "+curBlock); break;
+                    case PRINT_OUT_AND_IGNORE: System.out.println("attemting to set ("+x+", "+y+") to "+b+"; it is "+curBlock); return;
+                    case PRINT_ERR_AND_DO: System.err.println("attemting to set ("+x+", "+y+") to "+b+"; it is "+curBlock); break;
+                    case PRINT_ERR_AND_IGNORE: System.err.println("attemting to set ("+x+", "+y+") to "+b+"; it is "+curBlock); return;
+                    case THROW_IF_DIFFERENT: throw new IllegalWorldException("block ("+x+", "+y+") not good; is"+curBlock+", trying to set to "+b);
+                    case THROW: throw new BlockNotNullException("attemting to set ("+x+", "+y+") to "+b+"; it is "+curBlock, curBlock);
                 }
             }
             genSpace[x][y]=b;
@@ -103,17 +104,17 @@ public class TerrainGen {
             case DO: break;
         }
         if(x>=0&&x<strips.length){
-            if(strips[x].getBlock(localYToGlobalY(y,cy))!=null){
+            curBlock=strips[x].getBlock(localYToGlobalY(y,cy));
+            if(curBlock!=null){
                 switch(snn){
                     case DO: break;
                     case IGNORE: return;
-                    case PRINT_OUT_AND_DO: System.out.println("attemting to set ("+x+", "+y+"), which is not null"); break;
-                    case PRINT_OUT_AND_IGNORE: System.out.println("attemting to set ("+x+", "+y+"), which is not null"); return;
-                    case PRINT_ERR_AND_DO: System.err.println("attemting to set ("+x+", "+y+"), which is not null"); break;
-                    case PRINT_ERR_AND_IGNORE: System.err.println("attemting to set ("+x+", "+y+"), which is not null"); return;
-                    case THROW_IF_NOT_SOLID: if(!strips[x].getBlock(localYToGlobalY(y,cy)).isSolid()) throw new IllegalWorldException("underground block ("+x+", "+y+") not solid");
-                    case THROW_IF_SOLID: if(strips[x].getBlock(localYToGlobalY(y,cy)).isSolid()) throw new IllegalWorldException("aboveground block ("+x+", "+y+") solid");
-                    case THROW: throw new BlockNotNullException("attemting to set ("+x+", "+y+"), which is not null", strips[x].getBlock(localYToGlobalY(y,cy)));
+                    case PRINT_OUT_AND_DO: System.out.println("attemting to set ("+x+", "+y+") to "+b+"; it is "+curBlock); break;
+                    case PRINT_OUT_AND_IGNORE: System.out.println("attemting to set ("+x+", "+y+") to "+b+"; it is "+curBlock); return;
+                    case PRINT_ERR_AND_DO: System.err.println("attemting to set ("+x+", "+y+") to "+b+"; it is "+curBlock); break;
+                    case PRINT_ERR_AND_IGNORE: System.err.println("attemting to set ("+x+", "+y+") to "+b+"; it is "+curBlock); return;
+                    case THROW_IF_DIFFERENT: throw new IllegalWorldException("block ("+x+", "+y+") not good; is"+curBlock+", trying to set to "+b);
+                    case THROW: throw new BlockNotNullException("attemting to set ("+x+", "+y+") to "+b+"; it is "+curBlock, curBlock);
                 }
             }
             strips[x].setBlock(b, localYToGlobalY(y,cy));
