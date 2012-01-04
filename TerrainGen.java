@@ -11,12 +11,36 @@ public class TerrainGen {
     
     private static final int HILL_MAX_H = 12;
     private static final int VALLEY_MIN_H = -12;
-    private static final byte UNSEEDED=0;
-    private static final byte BELOW_GROUND=1;
-    private static final byte ABOVE_GROUND=2;
-    private static final byte INVERSE_SQUARE=3;
+    private enum genType{
+        UNSEEDED,
+        BELOW_GROUND,
+        ABOVE_GROUND,
+        INVERSE_SQUARE,
+    }
+    private enum OoB{
+        DO,
+        DONT_DO,
+        THROW_X,
+        THROW_Y,
+        PRINT_OUT,
+        PRINT_ERR,
+    }
+    private enum setNotNull{
+        DO,
+        IGNORE,
+        PRINT_OUT_AND_DO,
+        PRINT_OUT_AND_IGNORE,
+        PRINT_ERR_AND_DO,
+        PRINT_ERR_AND_IGNORE,
+        THROW_IF_NOT_SOLID,
+        THROW_IF_SOLID,
+        THROW,
+    }
     private Random r = new Random();
     private LinkedList<int[][]> lengthsToGen = new LinkedList<int[][]>();
+    private Block[][] genSpace;
+    private WorldStrip[] strips;
+    private long cy;
     
     /**
      * 
@@ -33,64 +57,133 @@ public class TerrainGen {
         return (int)(globalY-globalYCenterRefrence+AdventureWorld.GEN_RADIUS_H);
     }
     
+    private Block getBlock(int x, int y, OoB outOfBounds) throws BadBlockException {
+        if(x>=0&&x<genSpace.length&&y>=0&&y<genSpace[x].length) return genSpace[x][y];
+        switch(outOfBounds){
+            case THROW_X: throw new BadBlockCordinatesException("("+x+", "+y+") is out of bounds");
+            case THROW_Y:
+            case PRINT_ERR: System.err.println("("+x+", "+y+") is out of bounds"); break;
+            case PRINT_OUT: System.out.println("("+x+", "+y+") is out of bounds"); break;
+            case DO: break;
+        }
+        if(x>=0&&x<strips.length) return strips[x].getBlock(localYToGlobalY(y,cy));
+        switch(outOfBounds){
+            case THROW_Y: throw new BadBlockCordinatesException("("+x+", "+y+") is out of bounds");
+            case PRINT_ERR: System.err.println("("+x+", "+y+") is out of bounds"); break;
+            case PRINT_OUT: System.out.println("("+x+", "+y+") is out of bounds"); break;
+            case DO: break;
+        }
+        throw new BadBlockCordinatesException("("+x+", "+y+") is out of bounds");
+    }
+    
+    private void setBlock(Block b, int x, int y, OoB outOfBounds, setNotNull snn) throws BadBlockException {
+        if(x>=0&&x<genSpace.length&&y>=0&&y<genSpace[x].length){
+            if(genSpace[x][y]!=null){
+                switch(snn){
+                    case DO: break;
+                    case IGNORE: return;
+                    case PRINT_OUT_AND_DO: System.out.println("attemting to set ("+x+", "+y+"), which is not null"); break;
+                    case PRINT_OUT_AND_IGNORE: System.out.println("attemting to set ("+x+", "+y+"), which is not null"); return;
+                    case PRINT_ERR_AND_DO: System.err.println("attemting to set ("+x+", "+y+"), which is not null"); break;
+                    case PRINT_ERR_AND_IGNORE: System.err.println("attemting to set ("+x+", "+y+"), which is not null"); return;
+                    case THROW_IF_NOT_SOLID: if(!genSpace[x][y].isSolid()) throw new IllegalWorldException("underground block ("+x+", "+y+") not solid");
+                    case THROW_IF_SOLID: if(genSpace[x][y].isSolid()) throw new IllegalWorldException("aboveground block ("+x+", "+y+") solid");
+                    case THROW: throw new BlockNotNullException("attemting to set ("+x+", "+y+"), which is not null", genSpace[x][y]);
+                }
+            }
+            genSpace[x][y]=b;
+            return;
+        }
+        switch(outOfBounds){
+            case THROW_X: throw new BadBlockCordinatesException("("+x+", "+y+") is out of bounds");
+            case THROW_Y:
+            case PRINT_ERR: System.err.println("("+x+", "+y+") is out of bounds"); break;
+            case PRINT_OUT: System.out.println("("+x+", "+y+") is out of bounds"); break;
+            case DONT_DO: return;
+            case DO: break;
+        }
+        if(x>=0&&x<strips.length){
+            if(strips[x].getBlock(localYToGlobalY(y,cy))!=null){
+                switch(snn){
+                    case DO: break;
+                    case IGNORE: return;
+                    case PRINT_OUT_AND_DO: System.out.println("attemting to set ("+x+", "+y+"), which is not null"); break;
+                    case PRINT_OUT_AND_IGNORE: System.out.println("attemting to set ("+x+", "+y+"), which is not null"); return;
+                    case PRINT_ERR_AND_DO: System.err.println("attemting to set ("+x+", "+y+"), which is not null"); break;
+                    case PRINT_ERR_AND_IGNORE: System.err.println("attemting to set ("+x+", "+y+"), which is not null"); return;
+                    case THROW_IF_NOT_SOLID: if(!strips[x].getBlock(localYToGlobalY(y,cy)).isSolid()) throw new IllegalWorldException("underground block ("+x+", "+y+") not solid");
+                    case THROW_IF_SOLID: if(strips[x].getBlock(localYToGlobalY(y,cy)).isSolid()) throw new IllegalWorldException("aboveground block ("+x+", "+y+") solid");
+                    case THROW: throw new BlockNotNullException("attemting to set ("+x+", "+y+"), which is not null", strips[x].getBlock(localYToGlobalY(y,cy)));
+                }
+            }
+            strips[x].setBlock(b, localYToGlobalY(y,cy));
+            return;
+        }
+        switch(outOfBounds){
+            case THROW_Y: throw new BadBlockCordinatesException("("+x+", "+y+") is out of bounds");
+            case PRINT_ERR: System.err.println("("+x+", "+y+") is out of bounds"); break;
+            case PRINT_OUT: System.out.println("("+x+", "+y+") is out of bounds"); break;
+            case DO: break;
+        }
+        throw new BadBlockCordinatesException("("+x+", "+y+") is out of bounds");
+    }
+    
     /**
      * generate a square of the world
      */
     public void genWorld(WorldStrip[] strips, long cy) throws IllegalWorldException{
-        Block genSpace[][]=new Block[strips.length][(AdventureWorld.GEN_RADIUS_H*2)+1];
+        this.strips=strips;
+        this.cy=cy;
+        genSpace=new Block[strips.length][(AdventureWorld.GEN_RADIUS_H*2)+1];
         long top = cy+AdventureWorld.GEN_RADIUS_H,bottom = cy-AdventureWorld.GEN_RADIUS_H;
-        byte gen_config=UNSEEDED;
+        genType gen_config=genType.UNSEEDED;
         for(int i=0;i<genSpace.length;i++){
             for(int j=0;j<genSpace[i].length;j++){
                 Block curBlock=strips[i].getBlock(localYToGlobalY(j,cy));
-                genSpace[i][j]=curBlock;
+                setBlock(curBlock,i,j,OoB.THROW_X,setNotNull.DO);//genSpace[i][j]=curBlock;
                 if(curBlock!=null){
                     switch(gen_config){
                         case UNSEEDED:
-                            if(curBlock.isSolid()&&j==genSpace.length) gen_config=BELOW_GROUND;
-                            else if(j==0) gen_config=ABOVE_GROUND;
+                            if(curBlock.isSolid()&&j==genSpace.length) gen_config=genType.BELOW_GROUND;
+                            else if(j==0) gen_config=genType.ABOVE_GROUND;
                             break;
                         case BELOW_GROUND:
-                            if(!curBlock.isSolid()) gen_config=INVERSE_SQUARE;
+                            if(!curBlock.isSolid()) gen_config=genType.INVERSE_SQUARE;
                             break;
                         case ABOVE_GROUND:
-                            if(curBlock.isSolid()) gen_config=INVERSE_SQUARE;
+                            if(curBlock.isSolid()) gen_config=genType.INVERSE_SQUARE;
                             break;
                     }
                 }
             }
         }
-        if(gen_config==UNSEEDED&&top<(VALLEY_MIN_H)) gen_config=BELOW_GROUND;
-        if(gen_config==UNSEEDED&&bottom>HILL_MAX_H) gen_config=ABOVE_GROUND;
+        if(gen_config==genType.UNSEEDED&&top<(VALLEY_MIN_H)) gen_config=genType.BELOW_GROUND;
+        if(gen_config==genType.UNSEEDED&&bottom>HILL_MAX_H) gen_config=genType.ABOVE_GROUND;
         switch(gen_config){
            case BELOW_GROUND:
                 for(int i=0;i<genSpace.length;i++){
                     for(int j=0;j<genSpace[i].length;j++){
-                        if(genSpace[i][j]==null){
-                            genSpace[i][j]=new Ground(strips[i].getX(),localYToGlobalY(j,cy));
-                        }else if(!genSpace[i][j].isSolid())throw new IllegalWorldException("underground block not solid!");//should never be reached
+                        setBlock(/*genSpace[i][j]=*/new Ground(strips[i].getX(),localYToGlobalY(j,cy))/* */,i,j,OoB.THROW_X,setNotNull.THROW);
                     }
                 }
                 break;
              case ABOVE_GROUND:
                 for(int i=0;i<genSpace.length;i++){
                     for(int j=0;j<genSpace[i].length;j++){
-                        if(genSpace[i][j]==null){
-                            genSpace[i][j]=new Air(strips[i].getX(),localYToGlobalY(j,cy));
-                        }else if(genSpace[i][j].isSolid())throw new IllegalWorldException("aboveground block solid!");//should never be reached
+                        setBlock(/*genSpace[i][j]=*/new Air(strips[i].getX(),localYToGlobalY(j,cy))/* */,i,j,OoB.THROW_X,setNotNull.THROW);
                     }
                 }
                 break;
             case UNSEEDED:
                 int heights[][]=new int[2][2];//{{x1,y1},{x2,y2}}
-                heights[0][0]=0;
-                heights[1][0]=genSpace.length;
+                heights[0][0] = 0;
+                heights[1][0] = genSpace.length;
                 heights[0][1] = centeredRandom(VALLEY_MIN_H,HILL_MAX_H);
                 heights[1][1] = centeredRandom(VALLEY_MIN_H,HILL_MAX_H);
                 heights[0][1] = globalYToLocalY(heights[0][1],cy);
                 heights[1][1] = globalYToLocalY(heights[1][1],cy);
                 lengthsToGen.add(heights);
-                gen_config=INVERSE_SQUARE;
+                gen_config=genType.INVERSE_SQUARE;
             case INVERSE_SQUARE:
                 int curx=0,curh=0;
                 for(int i=0;i<genSpace.length;i++){
@@ -104,14 +197,16 @@ public class TerrainGen {
                     if(lowestAir==-1){
                         int g=((highestGround>=VALLEY_MIN_H)&&(highestGround!=-1))? highestGround: VALLEY_MIN_H-1;
                         for(lowestAir=g+1;localYToGlobalY(lowestAir,cy)<=HILL_MAX_H;lowestAir++){
-                            if(genSpace[i][lowestAir]==null||genSpace[i][lowestAir].isSolid()) continue;
+                            //if(genSpace[i][lowestAir]==null||genSpace[i][lowestAir].isSolid()) continue;
+                            if(getBlock(i,lowestAir,OoB.DO)==null||getBlock(i,lowestAir,OoB.DO).isSolid()) continue;
                             break;
                         }
                     }
                     if(highestGround==-1){
                         int a=lowestAir>=HILL_MAX_H? lowestAir: HILL_MAX_H+1;
                         for(highestGround=a-1;localYToGlobalY(highestGround,cy)>=VALLEY_MIN_H;highestGround--){
-                            if(genSpace[i][highestGround]==null||genSpace[i][highestGround].isSolid()) continue;
+                            //if(genSpace[i][highestGround]==null||genSpace[i][highestGround].isSolid()) continue;
+                            if(getBlock(i,highestGround,OoB.DO)==null||getBlock(i,highestGround,OoB.DO).isSolid()) continue;
                             break;
                         }
                     }
@@ -134,28 +229,35 @@ public class TerrainGen {
             double curVar = curLen[1][0]-curLen[0][0]*1.1;
             int[] heights = applyInverseSquareRecursively(curLen,curVar);
             for(int i=0;i<heights.length;i++){
+                System.out.println(heights[i]);
+                if(i<0||i>=genSpace.length) continue;
                 if(heights[i]>genSpace[i].length){
                     for(int j=0;j<genSpace[i].length;j++){
-                        if(genSpace[i][j]==null){
+                        /*if(genSpace[i][j]==null){
                             genSpace[i][j]=new Ground(strips[i].getX(),localYToGlobalY(j,cy));
-                        }else if(!genSpace[i][j].isSolid())throw new IllegalWorldException("underground block not solid!");//should never be reached
+                        }else if(!genSpace[i][j].isSolid())throw new IllegalWorldException("underground block not solid!");//should never be reached*/
+                        setBlock(new Ground(strips[0].getX()+i/*strips[i].getX()*/,localYToGlobalY(j,cy)),i,j,OoB.DO,setNotNull.PRINT_ERR_AND_IGNORE/*THROW_IF_NOT_SOLID*/);
                     }  
                 }else if(heights[i]<0){
                     for(int j=0;j<genSpace[i].length;j++){
-                        if(genSpace[i][j]==null){
+                        /*if(genSpace[i][j]==null){
                             genSpace[i][j]=new Air(strips[i].getX(),localYToGlobalY(j,cy));
-                        }else if(genSpace[i][j].isSolid())throw new IllegalWorldException("aboveground block solid!");//should never be reached
+                        }else if(genSpace[i][j].isSolid())throw new IllegalWorldException("aboveground block solid!");//should never be reached*/
+                        setBlock(new Air(strips[0].getX()+i/*strips[i].getX()*/,localYToGlobalY(j,cy)),i,j,OoB.DO,setNotNull.PRINT_ERR_AND_IGNORE/*THROW_IF_SOLID*/);
                     }
                 }else{
                     for(int j=heights[i];j>0;j--){
-                        if(genSpace[i][j]==null){
+                        if(j==0) break;
+                        /*if(genSpace[i][j]==null){
                             genSpace[i][j]=new Ground(strips[i].getX(),localYToGlobalY(j,cy));
-                        }else if(!genSpace[i][j].isSolid())throw new IllegalWorldException("underground block not solid!");//should never be reached
+                        }else if(!genSpace[i][j].isSolid())throw new IllegalWorldException("underground block not solid!");//should never be reached*/
+                        setBlock(new Ground(strips[0].getX()+i/*strips[i].getX()*/,localYToGlobalY(j,cy)),i,j,OoB.DO,setNotNull.PRINT_ERR_AND_IGNORE/*THROW_IF_NOT_SOLID*/);
                     }
                     for(int j=heights[i]+1;j<genSpace[i].length;j++){
-                        if(genSpace[i][j]==null){
+                        /*if(genSpace[i][j]==null){
                             genSpace[i][j]=new Air(strips[i].getX(),localYToGlobalY(j,cy));
-                        }else if(genSpace[i][j].isSolid())throw new IllegalWorldException("aboveground block solid!");//should never be reached
+                        }else if(genSpace[i][j].isSolid())throw new IllegalWorldException("aboveground block solid!");//should never be reached*/
+                        setBlock(new Air(strips[0].getX()+i/*strips[i].getX()*/,localYToGlobalY(j,cy)),i,j,OoB.DO,setNotNull.PRINT_ERR_AND_IGNORE/*THROW_IF_SOLID*/);
                     }
                 }
             }
@@ -173,7 +275,8 @@ public class TerrainGen {
     }
     
     private int[] applyInverseSquareRecursively(int curLen[][], double curVar){
-        int len=curLen[1][0]-curLen[0][0];
+        if(curLen[0][0]==curLen[1][0]) return new int[]{curLen[0][1]};
+        int len=Math.abs(curLen[1][0]-curLen[0][0]);
         int returnArray[]=new int[len+1];
         returnArray[0]=curLen[0][1];
         returnArray[len]=curLen[1][1];
