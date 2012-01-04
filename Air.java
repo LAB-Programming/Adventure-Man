@@ -14,4 +14,8 @@ public class Air extends Block
     public boolean isSolid() {
         return false;
     }
+    
+    public String toString() {
+        return "Air";
+    }
 }

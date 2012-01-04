@@ -14,4 +14,8 @@ public class Ground extends Block
     public boolean isSolid() {
         return true;
     }
+    
+    public String toString() {
+        return "Ground";
+    }
 }

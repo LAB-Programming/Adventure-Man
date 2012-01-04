@@ -19,4 +19,6 @@ public abstract class Block extends WorldItem
     }
     
     public abstract boolean isSolid();
+    
+    public abstract String toString();
 }

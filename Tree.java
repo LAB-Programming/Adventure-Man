@@ -30,6 +30,10 @@ public class Tree extends Block implements Interactable
         return "Tree";
     }
     
+    public String toString() {
+        return getName();
+    }
+    
     public boolean isHidden() {
         return false;
     }
