@@ -1,6 +1,7 @@
 import java.util.Random;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.Arrays;
 /**
  * Write a description of class TerrainGen here.
  * 
@@ -223,11 +224,22 @@ public class TerrainGen {
         }
         //if(true) throw new RuntimeException("Code to generate world not created yet!");
         ///**generate world here*/
+        /*
+         * BELOW HERE SHOULD BE A DIFFERENT CLASS AS IT HAS NO CONNECTIONS WITH ANY OF THE PREVIOUS CODE!!!!!!!!
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         */
+        
         Iterator<int[][]> lenghtsToGenIterator = lengthsToGen.iterator();
         int curLen[][];
         while(lenghtsToGenIterator.hasNext()){
             curLen=lenghtsToGenIterator.next();
             double curVar = curLen[1][0]-curLen[0][0]*1.1;
+            if(((int)curVar) <= 0) System.err.println("BAD curVar! ("+ curVar +", (int) "+ (int)curVar +")");
             int[] heights = applyInverseSquareRecursively(curLen,curVar);
             for(int i=0;i<heights.length;i++){
                 System.out.println(heights[i]);
@@ -277,14 +289,18 @@ public class TerrainGen {
     
     private int[] applyInverseSquareRecursively(int curLen[][], double curVar){
         if(curLen[0][0]==curLen[1][0]) return new int[]{curLen[0][1]};
-        int len=Math.abs(curLen[1][0]-curLen[0][0]);
-        int returnArray[]=new int[len+1];
-        returnArray[0]=curLen[0][1];
-        returnArray[len]=curLen[1][1];
+        int len = Math.abs(curLen[1][0]-curLen[0][0]);
+        int returnArray[] = new int[len+1];
+        returnArray[0] = curLen[0][1];
+        returnArray[len] = curLen[1][1];
         int center = (len)/2;
         int centerH = (returnArray[0]+returnArray[1])/2;
-        centerH += (int)(r.nextInt((int)curVar)-curVar/2);
-        returnArray[center]=centerH;
+        try {
+            centerH += (int)(r.nextInt((int)curVar)-curVar/2);
+        }catch(IllegalArgumentException iae) {
+            throw new IllegalArgumentException("curVar is BAD: "+curVar+", (int) "+(int)curVar+"\n badly derived from curLen: " +Arrays.toString(curLen),iae);
+        }
+        returnArray[center] = centerH;
         if(curLen[0][0]-center>1){
             int newCurLen[][]=new int[2][2];
             newCurLen[0][0]=curLen[0][0];
