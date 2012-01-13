@@ -130,12 +130,8 @@ public class TerrainGen {
         throw new BadBlockCordinatesException("("+x+", "+y+") is out of bounds");
     }
     
-    /**
-     * generate a square of the world
-     */
-    public void genWorld(WorldStrip[] strips, long cy) throws IllegalWorldException{
-        this.strips=strips;
-        this.cy=cy;
+    
+    private void setupWorldForGen(){
         genSpace=new Block[strips.length][(AdventureWorld.GEN_RADIUS_H*2)+1];
         long top = cy+AdventureWorld.GEN_RADIUS_H,bottom = cy-AdventureWorld.GEN_RADIUS_H;
         genType gen_config=genType.UNSEEDED;
@@ -222,24 +218,22 @@ public class TerrainGen {
                     curh=curHeights[1][1];
                 }
         }
-        //if(true) throw new RuntimeException("Code to generate world not created yet!");
-        ///**generate world here*/
-        /*
-         * BELOW HERE SHOULD BE A DIFFERENT CLASS AS IT HAS NO CONNECTIONS WITH ANY OF THE PREVIOUS CODE!!!!!!!!
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         */
+    }
+    
+    
+    /**
+     * generate a square of the world
+     */
+    public void genWorld(WorldStrip[] strips, long cy) throws IllegalWorldException{
+        this.strips=strips;
+        this.cy=cy;
+        setupWorldForGen();
         
         Iterator<int[][]> lenghtsToGenIterator = lengthsToGen.iterator();
         int curLen[][];
         while(lenghtsToGenIterator.hasNext()){
             curLen=lenghtsToGenIterator.next();
             double curVar = curLen[1][0]-curLen[0][0]*1.1;
-            if(((int)curVar) <= 0) System.err.println("BAD curVar! ("+ curVar +", (int) "+ (int)curVar +")");
             int[] heights = applyInverseSquareRecursively(curLen,curVar);
             for(int i=0;i<heights.length;i++){
                 System.out.println(heights[i]);
@@ -298,7 +292,14 @@ public class TerrainGen {
         try {
             centerH += (int)(r.nextInt((int)curVar)-curVar/2);
         }catch(IllegalArgumentException iae) {
-            throw new IllegalArgumentException("curVar is BAD: "+curVar+", (int) "+(int)curVar+"\n badly derived from curLen: " +Arrays.toString(curLen),iae);
+            StringBuilder errString = new StringBuilder("curVar is BAD: ");
+            errString.append(curVar);
+            errString.append(", (int) ");
+            errString.append((int)curVar);
+            errString.append("\n badly derived from curLen: {");
+            for(int[] i: curLen) errString.append(Arrays.toString(i));
+            errString.append("}");
+            throw new IllegalArgumentException(errString.toString(),iae);
         }
         returnArray[center] = centerH;
         if(curLen[0][0]-center>1){

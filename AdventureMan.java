@@ -37,7 +37,7 @@ public class AdventureMan
         }
         world = new AdventureWorld(this);
         System.out.println("Welcome to Adventure Man!");
-        player = new Player(world,0,0);
+        player = new Player(world,-1,0);
         world.addEntity(player,0,512);
         
         while(!response.equalsIgnoreCase("quit")) {
