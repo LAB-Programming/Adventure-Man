@@ -17,29 +17,32 @@ public class AdventureMan
     /**
      * Constructor for objects of class AdventureMan
      */
-    public AdventureMan()
+    public AdventureMan(boolean doIntro)
     {
         System.out.println("Hi World!");
-        String response = in.nextLine();
-        while(!response.equalsIgnoreCase("start")) {
-            if(response.equalsIgnoreCase("path")){
-                System.out.println(new File(".").getAbsolutePath());
-                response = in.nextLine();
-                continue;
-            }
-            if(response.equalsIgnoreCase("quit")){
-                System.exit(0);
-                response = in.nextLine();
-                continue;
-            }
-            System.out.println(response + " to you, too");
+        String response = "";
+        if(doIntro) {
             response = in.nextLine();
+            while(!response.equalsIgnoreCase("start")) {
+                if(response.equalsIgnoreCase("path")){
+                    System.out.println(new File(".").getAbsolutePath());
+                    response = in.nextLine();
+                    continue;
+                }
+                if(response.equalsIgnoreCase("quit")){
+                    System.exit(0);
+                    response = in.nextLine();
+                    continue;
+                }
+                System.out.println(response + " to you, too");
+                response = in.nextLine();
+            }
         }
         world = new AdventureWorld(this);
         System.out.println("Welcome to Adventure Man!");
         player = new Player(world,-1,0);
         world.addEntity(player,0,512);
-        
+
         while(!response.equalsIgnoreCase("quit")) {
             /*Set<WorldItem> curItems = world.world.get(new Integer(player.getLoc()));
             WorldItem curItem=null;
@@ -48,22 +51,22 @@ public class AdventureMan
             if(response.equalsIgnoreCase("move left")) player.move(-1);
             else if(response.equalsIgnoreCase("move right")) player.move(1);
             else if(response.equalsIgnoreCase("inspect")) {
-                while(curItemsIterator.hasNext()){
-                    curItem=curItemsIterator.next();
-                    if (curItem instanceof Important){
-                        System.out.println("You are standing near a " + ((Important) curItem).getName());
-                        locationIsImportant=true;
-                    }
-                }
-                if(!locationIsImportant) System.out.println("There is nothing of interest around you");
+            while(curItemsIterator.hasNext()){
+            curItem=curItemsIterator.next();
+            if (curItem instanceof Important){
+            System.out.println("You are standing near a " + ((Important) curItem).getName());
+            locationIsImportant=true;
+            }
+            }
+            if(!locationIsImportant) System.out.println("There is nothing of interest around you");
             }
             else{
-                curItem=null;
-                curItemsIterator = curItems.iterator();
-                while(curItemsIterator.hasNext()){
-                    curItem=curItemsIterator.next();
-                    if((curItem instanceof Interactable) && response.equalsIgnoreCase(((Interactable) curItem).getInteractCmd())) ((Interactable) curItem).interact();
-                }
+            curItem=null;
+            curItemsIterator = curItems.iterator();
+            while(curItemsIterator.hasNext()){
+            curItem=curItemsIterator.next();
+            if((curItem instanceof Interactable) && response.equalsIgnoreCase(((Interactable) curItem).getInteractCmd())) ((Interactable) curItem).interact();
+            }
             }*/
             WorldSpace curSpace = world.getStrip(player.getLocx()).getSpace(player.getLocy());
             HashSet<Interactable> interacters = new HashSet<Interactable>();
@@ -72,8 +75,8 @@ public class AdventureMan
             if(curSpace.getBlock() instanceof Interactable && (((Interactable) curSpace.getBlock()).isInteractCmd(response)))
                 interacters.add((Interactable) curSpace.getBlock());
             while(curEntitiesIterator.hasNext()){
-                    curEntity=curEntitiesIterator.next();
-                    if(curEntity.isInteractCmd(response)) interacters.add(curEntity);
+                curEntity=curEntitiesIterator.next();
+                if(curEntity.isInteractCmd(response)) interacters.add(curEntity);
             }
             Interactable[] interacterArray = interacters.toArray(new Interactable[interacters.size()]);
             if(interacters.size() > 1) {
@@ -98,15 +101,16 @@ public class AdventureMan
     }
 
     public static void main(String args[]) {
-        AdventureMan am = new AdventureMan();
+        boolean debugMode = !(args.length > 0);
+        AdventureMan am = new AdventureMan(debugMode);
 
     }
-    
+
     public String specialRead(String msg) {
         System.out.println(msg);
         return in.nextLine();
     }
-    
+
     public Player getPlayer() {
         return player;
     }

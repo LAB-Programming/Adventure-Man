@@ -5,6 +5,7 @@ import java.util.Random;
  * Write a description of class AdventureWorld here.
  * 
  * @author gavin yancey
+ * @author louis hyde
  * @version -1
  */
 public class AdventureWorld
