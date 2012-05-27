@@ -40,7 +40,7 @@ public class AdventureMan
         }
         world = new AdventureWorld(this);
         System.out.println("Welcome to Adventure Man!");
-        player = new Player(world,-1,0);
+        player = new Player(world,5,0);
         world.addEntity(player,0,512);
 
         while(!response.equalsIgnoreCase("quit")) {
@@ -70,7 +70,13 @@ public class AdventureMan
             }*/
             WorldSpace curSpace = world.getStrip(player.getLocx()).getSpace(player.getLocy());
             HashSet<Interactable> interacters = new HashSet<Interactable>();
-            Iterator<Entity> curEntitiesIterator = curSpace.getEntities().iterator();
+            Iterator<Entity> curEntitiesIterator = null;
+            try {
+                curEntitiesIterator = curSpace.getEntities().iterator();
+            }catch(NullPointerException npe) {
+                npe.printStackTrace();
+                throw new NullPointerException(world.toString());
+            }
             Entity curEntity=null;
             if(curSpace.getBlock() instanceof Interactable && (((Interactable) curSpace.getBlock()).isInteractCmd(response)))
                 interacters.add((Interactable) curSpace.getBlock());

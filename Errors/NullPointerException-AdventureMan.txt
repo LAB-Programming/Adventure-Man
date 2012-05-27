@@ -1,0 +1,12 @@
+java.lang.NullPointerException
+	at AdventureMan.<init>(AdventureMan.java:72)
+	at AdventureMan.main(AdventureMan.java:107)
+	at __SHELL10.run(__SHELL10.java:6)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at bluej.runtime.ExecServer$3.run(ExecServer.java:724)
+java.lang.NullPointerException: {-1={}, 0={}, -2={}, 1={}, -3={}, 2={}, 3={}, -4={}, 4={}, -5={}, 5={}, -6={}, 6={}, -7={}, 7={}, -8={}, 8={}, -9={}, 9={}, -10={}, 10={}}
+	at AdventureMan.<init>(AdventureMan.java:75)
+	at AdventureMan.main(AdventureMan.java:107)

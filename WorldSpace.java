@@ -57,4 +57,9 @@ public class WorldSpace
     public boolean isGenned() {
         return gen;
     }
+    
+    
+    public String toString() {
+        return "Block "+block.getClass().getName()+"and " +entities.size()+ " Entities";
+    }
 }

@@ -92,4 +92,9 @@ public class AdventureWorld
     public Player getPlayer() {
         return game.getPlayer();
     }
+    
+    
+    public String toString() {
+        return world.toString();
+    }
 }

@@ -143,4 +143,9 @@ public class WorldStrip
     public WorldSpace getSpace(long y) {
         return strip.get(new Long(y));
     }
+    
+    
+    public String toString() {
+        return strip.toString();
+    }
 }
