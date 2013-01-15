@@ -87,23 +87,36 @@ public class Player extends Entity
         return "Player";
     }
 
-    public Player(AdventureWorld wrld, int x, int y) {
+    public Player(AdventureWorld wrld, long x, long y) {
         super(wrld,x, y);
     }
 
-    public boolean move(int i) {
+    public MoveResult move(int i) {
         world.genWorld(getLocx()+i,getLocy());
-        if(super.move(i)) {
+        MoveResult result = super.move(i);
+        switch(result) {
+        case SUCCESS:
             System.out.println("You moved " + (i < 0 ? "Left" : "Right"));
-            return true;
-        }
-        else {
+            break;
+        case EDGE_OF_WORLD:
             System.out.println("You are at the edge of the World");
-            return false;
+            System.err.println("WTF! the world is supposed to be infinite!!!!");
+            break;
+        case TOO_HIGH:
+            System.err.println("You try to reach the edge of the cliff you are facing but you fall just slightly short");
+            break;
+        default:
+            System.err.println("Hmm... for some reason you can not move that way. Go smack the programmer");
+            break;
         }
+        return result;
     }
 
     public boolean isHidden() {
         return true;
+    }
+    
+    public int getMaxMoveHeight() {
+        return 1;
     }
 }
