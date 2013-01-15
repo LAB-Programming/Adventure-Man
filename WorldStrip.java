@@ -15,6 +15,9 @@ public class WorldStrip
     //private BlockGenerator dBlockGen;
     private HashMap<Long,WorldSpace> strip = new HashMap<Long,WorldSpace>();
     private long x;
+    public static final int TREE_AVERAGE_INTERVAL = 5;
+    public static final int TREE_HEIGHT_RANGE = 3;
+    public static final int TREE_HEIGHT_MIN = 1;
     //private LinkedList<WorldSpace> stripAboveWater = new LinkedList<WorldSpace>();
     //private LinkedList<WorldSpace> stripBelowWater = new LinkedList<WorldSpace>();
     

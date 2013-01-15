@@ -20,7 +20,7 @@ public class Tree extends Block implements Interactable
         return cmd.equalsIgnoreCase("chop tree")||cmd.equalsIgnoreCase("chop");
     }
 
-    public Tree(int x, int y, int h, AdventureWorld wrld) {
+    public Tree(long x, long y, int h, AdventureWorld wrld) {
         super(x,y);
         height = h;
         world = wrld;
