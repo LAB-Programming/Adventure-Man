@@ -73,6 +73,11 @@ public class AdventureMan
                 response = in.nextLine();
                 continue;
             }
+            if(response.equals("GET-POS")) {
+                System.out.println("(" + player.getLocx() + "," + player.getLocy() + ")");
+                response = in.nextLine();
+                continue;
+            }
             WorldSpace curSpace = world.getStrip(player.getLocx()).getSpace(player.getLocy());
             HashSet<Interactable> interacters = new HashSet<Interactable>();
             Iterator<Entity> curEntitiesIterator = null;

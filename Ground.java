@@ -18,4 +18,8 @@ public class Ground extends Block
     public String toString() {
         return "Ground";
     }
+    
+    public char getPic() {
+        return '\u25A4';
+    }
 }

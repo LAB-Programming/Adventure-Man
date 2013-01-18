@@ -39,7 +39,7 @@ public class AdventureWorld
 
     public void genWorld(long cx, long cy) {
         if(generator == null) {
-            if(this == null) System.out.println("AdventureWorld: §WORLD IS NUULLLLLLLL!!!!!!");
+            if(this == null) System.out.println("AdventureWorld: WORLD IS NUULLLLLLLL!!!!!!");
             generator = new WorldGen(this);
         }
         generator.genWorld(cx,cy);
@@ -58,8 +58,8 @@ public class AdventureWorld
         world.get(new Long(x)).addEntity(newEntity,y);
     }
 
-    public void removeEntity(Entity entity, long x, long y) {
-        world.get(new Long(x)).removeEntity(entity,y);
+    public boolean removeEntity(Entity entity, long x, long y) {
+        return world.get(new Long(x)).removeEntity(entity,y);
     }
 
     /**

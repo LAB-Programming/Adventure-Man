@@ -18,4 +18,8 @@ public class Air extends Block
     public String toString() {
         return "Air";
     }
+    
+    public char getPic() {
+        return ' ';
+    }
 }

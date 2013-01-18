@@ -42,4 +42,13 @@ public class Tree extends Block implements Interactable
     public boolean isSolid() {
         return false;
     }
+    
+    public char getPic() {
+        switch(height){
+            case 1: return '\u05D6';
+            case 2: return '\u0373';
+            case 3: return '\u0372';
+            default: return 't';
+        }
+    }
 }

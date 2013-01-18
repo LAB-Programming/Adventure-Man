@@ -48,7 +48,7 @@ public abstract class Entity extends WorldItem implements Interactable
                 locy = storeY;
                 return moveToTop;
         }
-        world.removeEntity(this,locx,locy);
+        world.removeEntity(this,storeX,storeY);
         world.addEntity(this,locx,locy);
         return MoveResult.SUCCESS;
     }

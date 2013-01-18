@@ -33,6 +33,16 @@ public class Player extends Entity
         else if(cmd.equals("inventory")){
             System.out.println("you have:\n"+Arrays.toString(inventory));
         }
+        else if(cmd.equals("survey")){
+            StringBuilder sb = new StringBuilder();
+            for(int i = 2; i >= -2; i--){
+                for(int j = -3; j <= 3; j++){
+                    sb.append(world.getStrip(locx+j).getSpace(locy+i).getFrontItem().getPic());
+                }
+                sb.append("\n");
+            }
+            System.out.print(sb);
+        }
     }
 
     public InventoryItem[] inventory = new InventoryItem[15];
@@ -79,7 +89,7 @@ public class Player extends Entity
 
     public boolean isInteractCmd(String cmd) {
         cmd = cmd.toLowerCase();
-        if (cmd.equals("move left") || cmd.equals("move right") || cmd.equals("inspect") || cmd.equals("inventory")) return true;
+        if (cmd.equals("move left") || cmd.equals("move right") || cmd.equals("inspect") || cmd.equals("inventory") || cmd.equals("survey")) return true;
         return false;
     }
 
@@ -118,5 +128,9 @@ public class Player extends Entity
     
     public int getMaxMoveHeight() {
         return 1;
+    }
+    
+    public char getPic() {
+        return '@';
     }
 }

@@ -12,7 +12,7 @@ public class WorldSpace
 
     private HashSet<Entity> entities;
     
-    private boolean gen = false;
+    private boolean gen = true; // may cause problems later
 
     public WorldSpace(Block startBlock) {
         block = startBlock;
@@ -58,6 +58,10 @@ public class WorldSpace
         return gen;
     }
     
+    public WorldItem getFrontItem(){
+        if(entities.size()>0) return entities.iterator().next();
+        else return block;
+    }
     
     public String toString() {
         return "Block "+block.getClass().getName()+" and " +entities.size()+ " Entities";

@@ -24,7 +24,7 @@ public class TerrainGen
                     } else if(y == 0) {
                         Random rand = new Random();
                         if(rand.nextInt(WorldStrip.TREE_AVERAGE_INTERVAL) == 0) {
-                            newBlock = new Tree(x.getX(), y, rand.nextInt(WorldStrip.TREE_HEIGHT_RANGE) + WorldStrip.TREE_HEIGHT_RANGE, world);
+                            newBlock = new Tree(x.getX(), y, rand.nextInt(WorldStrip.TREE_HEIGHT_RANGE) + WorldStrip.TREE_HEIGHT_MIN, world);
                         } else {
                             newBlock = new Air(x.getX(), y);
                         }

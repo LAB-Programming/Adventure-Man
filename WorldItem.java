@@ -16,4 +16,6 @@ public abstract class WorldItem
     public long getLocy() {
         return locy;
     }
+    
+    public abstract char getPic();
 }
