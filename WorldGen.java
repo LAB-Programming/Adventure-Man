@@ -9,10 +9,12 @@ public class WorldGen
 {
     private AdventureWorld world;
     
-    private TerrainGen tgen = new TerrainGen(world);
+    private TerrainGen tgen;
 
     public WorldGen(AdventureWorld wrld) {
+        if(wrld == null) System.out.println("WorldGen: WORLD IS NUULLLLLLLL!!!!!!");
         world = wrld;
+        tgen = new TerrainGen(world);
     }
     
     public void genWorld(long cx, long cy) {

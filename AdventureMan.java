@@ -39,6 +39,7 @@ public class AdventureMan
             }
         }
         world = new AdventureWorld(this);
+        world.genWorld(0,0);
         System.out.println("Welcome to Adventure Man!");
         player = new Player(world,0,0);
 
@@ -67,6 +68,11 @@ public class AdventureMan
             if((curItem instanceof Interactable) && response.equalsIgnoreCase(((Interactable) curItem).getInteractCmd())) ((Interactable) curItem).interact();
             }
             }*/
+            if(response.equals("GET-WORLD")) {
+                System.out.println(world);
+                response = in.nextLine();
+                continue;
+            }
             WorldSpace curSpace = world.getStrip(player.getLocx()).getSpace(player.getLocy());
             HashSet<Interactable> interacters = new HashSet<Interactable>();
             Iterator<Entity> curEntitiesIterator = null;

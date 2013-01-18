@@ -17,10 +17,9 @@ public class AdventureWorld
 
     private AdventureMan game;
 
-    private WorldGen generator = new WorldGen(this);
+    private WorldGen generator = null;
 
     public AdventureWorld(AdventureMan am) {
-        genWorld(0,0);
         game = am;
     }
 
@@ -39,6 +38,10 @@ public class AdventureWorld
      */
 
     public void genWorld(long cx, long cy) {
+        if(generator == null) {
+            if(this == null) System.out.println("AdventureWorld: §WORLD IS NUULLLLLLLL!!!!!!");
+            generator = new WorldGen(this);
+        }
         generator.genWorld(cx,cy);
     }
     

@@ -10,6 +10,7 @@ public class TerrainGen
     private final AdventureWorld world;
 
     public TerrainGen(AdventureWorld theWorld) {
+        if(theWorld == null) System.out.println("TerrainGen: WORLD IS NUULLLLLLLL!!!!!!");
         world = theWorld;
     }
     

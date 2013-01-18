@@ -8,7 +8,7 @@ public class Tree extends Block implements Interactable
 {
     private int height;
     
-    private AdventureWorld world;
+    private final AdventureWorld world;
 
     public void interact(String cmd) {
         world.setBlock(new Air(locx,locy), locx, locy);
@@ -22,6 +22,7 @@ public class Tree extends Block implements Interactable
 
     public Tree(long x, long y, int h, AdventureWorld wrld) {
         super(x,y);
+        if(wrld == null) System.out.println("Tree: WORLD IS NUULLLLLLLL!!!!!!");
         height = h;
         world = wrld;
     }
