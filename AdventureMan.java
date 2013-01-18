@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.io.File;
+import java.io.PrintStream;
 import java.util.*;
 /**
  * Write a description of class AdventureMan here.
@@ -13,6 +14,14 @@ public class AdventureMan
     private Scanner in = new Scanner(System.in);
     private AdventureWorld world;
     private Player player;
+    
+    static{
+        try{
+            System.setOut(new PrintStream(System.out, true, "UTF-8"));
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Constructor for objects of class AdventureMan
