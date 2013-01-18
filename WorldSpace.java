@@ -60,6 +60,6 @@ public class WorldSpace
     
     
     public String toString() {
-        return "Block "+block.getClass().getName()+"and " +entities.size()+ " Entities";
+        return "Block "+block.getClass().getName()+" and " +entities.size()+ " Entities";
     }
 }

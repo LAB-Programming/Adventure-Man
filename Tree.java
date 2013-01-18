@@ -11,7 +11,7 @@ public class Tree extends Block implements Interactable
     private AdventureWorld world;
 
     public void interact(String cmd) {
-        world.setBlock(new Ground(locx,locy), locx, locy);
+        world.setBlock(new Air(locx,locy), locx, locy);
         System.out.println("You cut down the tree and got " + (height*5) + " wood");
         world.getPlayer().addToInventory(new Wood(height*5));
     }

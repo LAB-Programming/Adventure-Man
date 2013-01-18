@@ -25,10 +25,10 @@ public class TerrainGen
                         if(rand.nextInt(WorldStrip.TREE_AVERAGE_INTERVAL) == 0) {
                             newBlock = new Tree(x.getX(), y, rand.nextInt(WorldStrip.TREE_HEIGHT_RANGE) + WorldStrip.TREE_HEIGHT_RANGE, world);
                         } else {
-                            newBlock = new Ground(x.getX(), y);
+                            newBlock = new Air(x.getX(), y);
                         }
                     } else {
-                        newBlock = new Ground(x.getX(), y);
+                        newBlock = new Air(x.getX(), y);
                     }
                     x.setBlock(newBlock, y);
                 }

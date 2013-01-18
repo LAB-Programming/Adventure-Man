@@ -15,6 +15,7 @@ public abstract class Entity extends WorldItem implements Interactable
         locy = y;
         if(!(moveToTop(false).equals(MoveResult.SUCCESS) && moveToGround().equals(MoveResult.SUCCESS))) {
             System.err.println("error fixing posistion");//should put them above ground
+            System.err.println(world);
         } else {
             world.addEntity(this,locx,locy);
         }
