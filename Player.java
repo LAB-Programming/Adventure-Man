@@ -13,22 +13,9 @@ public class Player extends Entity
         else if(cmd.equals("move right")||cmd.equals("mr")) this.move(1);
         else if(cmd.startsWith("move "))this.move(Integer.parseInt(cmd.split("move ")[0]));
         else if(cmd.equals("inspect")) {
-            WorldSpace curSpace = world.getStrip(getLocx()).getSpace(getLocy());
-            Iterator<Entity> curEntitiesIterator = curSpace.getEntities().iterator();
-            Entity curEntity=null;
-            boolean locationIsImportant=false;
-            if(curSpace.getBlock() instanceof Important && !((Important) curSpace.getBlock()).isHidden()) {
-                System.out.println("You are standing near a " + ((Important) curSpace.getBlock()).getName());
-                locationIsImportant = true;
-            }
-            while(curEntitiesIterator.hasNext()){
-                curEntity=curEntitiesIterator.next();
-                if(!curEntity.isHidden()) {
-                    System.out.println("You are standing near a " + ((Important) curEntity).getName());
-                    locationIsImportant = true;
-                }
-            }
-            if(!locationIsImportant) System.out.println("There is nothing of interest around you");
+            String inspect = inspect();
+            if(inspect.isEmpty()) inspect = "There is nothing of interest around you";
+            System.out.print(inspect);
         }
         else if(cmd.equals("inventory")){
             System.out.println("you have:\n"+Arrays.toString(inventory));
@@ -43,6 +30,27 @@ public class Player extends Entity
             }
             System.out.print(sb);
         }
+    }
+
+    private String inspect() {
+        WorldSpace curSpace = world.getStrip(getLocx()).getSpace(getLocy());
+        Iterator<Entity> curEntitiesIterator = curSpace.getEntities().iterator();
+        Entity curEntity=null;
+        StringBuilder response = new StringBuilder();
+        if(curSpace.getBlock() instanceof Important && !((Important) curSpace.getBlock()).isHidden()) {
+            response.append("You are standing near a ");
+            response.append(((Important) curSpace.getBlock()).getName());
+            response.append("\n");
+        }
+        while(curEntitiesIterator.hasNext()){
+            curEntity=curEntitiesIterator.next();
+            if(!curEntity.isHidden()) {
+                 response.append("You are standing near a ");
+                 response.append(((Important) curEntity).getName());
+                 response.append("\n");
+            }
+        }
+        return response.toString();
     }
 
     public InventoryItem[] inventory = new InventoryItem[15];
@@ -105,17 +113,18 @@ public class Player extends Entity
         world.genWorld(getLocx()+i,getLocy());
         MoveResult result = super.move(i);
         switch(result) {
-        case SUCCESS:
+            case SUCCESS:
             System.out.println("You moved " + (i < 0 ? "Left" : "Right"));
+            System.out.print(inspect());
             break;
-        case EDGE_OF_WORLD:
+            case EDGE_OF_WORLD:
             System.out.println("You are at the edge of the World");
             System.err.println("WTF! the world is supposed to be infinite!!!!");
             break;
-        case TOO_HIGH:
+            case TOO_HIGH:
             System.err.println("You try to reach the edge of the cliff you are facing but you fall just slightly short");
             break;
-        default:
+            default:
             System.err.println("Hmm... for some reason you can not move that way. Go smack the programmer");
             break;
         }
@@ -125,11 +134,11 @@ public class Player extends Entity
     public boolean isHidden() {
         return true;
     }
-    
+
     public int getMaxMoveHeight() {
         return 1;
     }
-    
+
     public char getPic() {
         return '@';
     }
